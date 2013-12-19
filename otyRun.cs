@@ -103,20 +103,41 @@ namespace otypar
         public Dictionary<string, otyObj> Variable;
         public otyVar Var;
         public List<otyParc> result;
-        public otyFunc DefFunc;
+        //public otyFunc DefFunc;
+        otyFunc defFunc;
+        public bool FuncFlg = false;
+        public otyFunc DefFunc
+        {
+            get
+            {
+                if (this.Parent == Empty)
+                {
+                    return this.defFunc;
+                }
+                return this.Parent.DefFunc;
+            }
+        }
         public otyRun()
         {
             Var = new otyVar { Variable = this };
             this.Variable = new Dictionary<string, otyObj>();
             this.result = new List<otyParc>();
-            DefFunc = new otyFunc();
+            defFunc = new otyFunc();
         }
+        otypar otypar;
         public otyRun(otypar r)
         {
             Var = new otyVar { Variable = this };
             this.Variable = new Dictionary<string, otyObj>();
             this.result = r.result;
-            DefFunc = new otyFunc();
+            this.defFunc = new otyFunc(r);
+            if (defFunc.Function.ContainsKey("main"))
+            {
+                //main!!!!!!!!!!11
+                this.startindex = defFunc.Function["main"].index;
+            }
+            this.otypar = r;
+            //DefFunc = new otyFunc(r);
         }
         public otyRun(otypar r,int index,otyRun p)
         {
@@ -125,14 +146,16 @@ namespace otypar
             this.result = r.result;
             this.startindex = index;
             this.index = index;
-            this.Parent = p;
-            DefFunc = new otyFunc();
+            this.Parent = p; this.otypar = r;
+            //DefFunc = new otyFunc();
         }
         int startindex=0;
         public int index = 0;
+        public bool FuncReturn=false;
         private enum otyrunstate
         {
-            None, IdenRun, NumRun, StrRun,FuncRun,ForRun,IfRun,IfSkip,
+            None, IdenRun, NumRun, StrRun, FuncRun, ForRun, IfRun, IfSkip,
+            Return,
         }
         int BlockSkip(int index,int block=0)
         {
@@ -149,6 +172,45 @@ namespace otypar
                         if (block == -1)
                             return index;
                         break;
+                }
+
+                index++;
+
+            }
+            return index;
+        }
+        //カッコ飛ばし
+        int ParentSkip(int index, int block = 0)
+        {
+            while (index < result.Count)
+            {
+                var j = result[index];
+                switch (j.otyParnum)
+                {
+                    case otyParnum.leftparent:
+                        block++;
+                        break;
+                    case otyParnum.rightparent:
+                        block--;
+                        if (block == -1)
+                            return index;
+                        break;
+                }
+
+                index++;
+
+            }
+            return index;
+        }
+        int StateSkip(int index)
+        {
+            while (index < result.Count)
+            {
+                var j = result[index];
+                switch (j.otyParnum)
+                {
+                    case otyParnum.semicolon:
+                        return index;
                 }
 
                 index++;
@@ -184,7 +246,7 @@ namespace otypar
             }
             return index;
         }
-        public void Run()
+        public otyObj Run()
         {
             int i = startindex;
             int forstart = 0, forstate1 = -1, forstate2 = -1, forstate3 = -1;
@@ -200,15 +262,24 @@ namespace otypar
                     case otyrunstate.IfRun:
                         if (j.otyParnum == otyParnum.leftparent)
                         {
-                            var cond = Eval(new otyObj(null, result, i+1));
-                            i = cond.index;
+                            var ifindex = ParentSkip(i,-1);
+                            var cond = Eval(new otyObj(result[i+1].Obj, result, i+1));
+                            i = ifindex;//cond.index;
                             if (cond.Num != 0)
                             {
+                                state = otyrunstate.None;
                                 //Console.WriteLine("IFtrue!");
                             }
                             else
                             {
-                                i = this.BlockSkip(i,-1);//手抜き
+                                if (result[i].otyParnum == otyParnum.blockstart || result[i + 1].otyParnum == otyParnum.blockstart)
+                                {
+                                    i = this.BlockSkip(i, -1);//手抜き
+                                }
+                                else
+                                {
+                                    i = this.StateSkip(i);
+                                }
                                 state = otyrunstate.None;
                             }
                         }
@@ -217,7 +288,7 @@ namespace otypar
                             state = otyrunstate.None;
                             //error!!
                         }
-                        
+
                         break;
                     case otyrunstate.ForRun:
                         switch (j.otyParnum)
@@ -230,24 +301,29 @@ namespace otypar
                                 if (forstate1 != -1 && forstate2 == -1 && forstate3 == -1) forstate2 = i + 1;
                                 break;
                             case otyParnum.leftparent:
-                                if(forstate1==-1)forstate1 = i + 1;
+                                if (forstate1 == -1) forstate1 = i + 1;
                                 //i = this.StateRun(i+1);
                                 //開始位置
                                 break;
                             case otyParnum.blockstart:
                                 if (forscope == otyRun.Empty)
                                 {
-                                    forstart = i-1;
+                                    forstart = i - 1;
                                     forscope = new otyRun(new otypar
                                     {
                                         result = this.result//result = this.result.GetRange(i + 1, this.result.Count - i - 1)
-                                    }, i + 1,this);
+                                    }, i + 1, this);
                                     forscope.StateRun(forstate1);
                                     var res = forscope.Eval(new otyObj(null, forscope.result, forstate2));
                                     if (res.Num == 1)
                                     {
 
-                                        forscope.Run();
+                                        var scopereslut=forscope.Run();
+                                        if (forscope.FuncReturn)
+                                        {
+                                            this.FuncReturn = true;
+                                            return scopereslut;
+                                        } 
                                         i = forscope.index - 1;
                                         forscope.Eval(new otyObj(null, forscope.result, forstate3));
                                     }
@@ -264,11 +340,16 @@ namespace otypar
                                 }
                                 else
                                 {
-                                    
+
                                     if (forscope.Eval(new otyObj(null, forscope.result, forstate2)).Num == 1)
                                     {
 
-                                        forscope.Run();
+                                        var scopereslut = forscope.Run();
+                                        if (forscope.FuncReturn)
+                                        {
+                                            this.FuncReturn = true;
+                                            return scopereslut;
+                                        } 
                                         i = forscope.index - 1;
                                         forscope.Eval(new otyObj(null, forscope.result, forstate3));
                                     }
@@ -299,19 +380,22 @@ namespace otypar
                             case otyParnum.identifier:
                                 switch (j.Name)
                                 {
-                                    case"for":
+                                    case "for":
                                         state = otyrunstate.ForRun;
                                         forstart = i;
                                         //Sub
                                         break;
-                                    case"if":
+                                    case "if":
                                         state = otyrunstate.IfRun;
+                                        break;
+                                    case "return":
+                                        state = otyrunstate.Return;
                                         break;
                                     default:
                                         state = otyrunstate.IdenRun;
                                         break;
                                 }
-                                
+
                                 break;
 
                             case otyParnum.num:
@@ -323,20 +407,33 @@ namespace otypar
                                 var scope = new otyRun(new otypar
                                 {
                                     result = this.result//result = this.result.GetRange(i + 1, this.result.Count - i - 1)
-                                }, i + 1,this);
-                                scope.Run();
+                                }, i + 1, this);
+                                var scopereslut_ = scope.Run();
+                                if (scope.FuncReturn)
+                                {
+                                    i = scope.index+1;
+                                    this.index = i;
+                                    this.FuncReturn = true;
+                                    return scopereslut_;
+                                }
                                 i = scope.index;
                                 break;
                             case otyParnum.blockend:
                                 this.index = i;
-                                return;
+                                return otyObj.Void;
                         }
-                        
+
                         break;
                     case otyrunstate.IdenRun:
                         switch (j.otyParnum)
                         {
                             case otyParnum.identifier:
+                                if (result[i + 1].otyParnum == otyParnum.leftparent)
+                                {
+                                    i = this.BlockSkip(i, -1);//手抜き
+                                    state = otyrunstate.None;
+                                    break;
+                                }
                                 otyObj obj;
                                 ///////////////////////debug!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
                                 try
@@ -344,8 +441,8 @@ namespace otypar
                                     this.Variable[j.Name] = otyObj.NULL;//this.Variable.Add(j.Name, otyObj.NULL);
                                 }
                                 catch { }
-                                    obj = Eval(new otyObj(this.Variable[j.Name], result, i));
-                                    i = obj.index;
+                                obj = Eval(new otyObj(this.Variable[j.Name], result, i));
+                                i = obj.index;
                                 //Console.Write(j.otyParnum);Console.WriteLine(obj.Obj);
                                 //変数宣言
 
@@ -369,12 +466,23 @@ namespace otypar
                                 state = otyrunstate.None;
                                 break;
                         }
-                        
+
                         break;
-                    
+                    case otyrunstate.Return:
+                        this.FuncReturn = true;
+                            var ret = Eval(new otyObj(j.Obj, result, i));
+
+                            if (ret.isNull())
+                            {
+                                return otyObj.Void;
+                            }
+                            else
+                                return ret;
+                        
                 }
                 i++;
             }
+            return otyObj.Void;
         }
         int StateRun(int index)
         {

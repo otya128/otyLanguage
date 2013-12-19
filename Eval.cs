@@ -17,6 +17,7 @@ namespace otypar
         const int EqualPrece = 8;
         const int MultiplyPrece = 4;
         const int ModuloPrece = 4;
+        const int DivisionPrece = 4;
         const int PlusEqualPrece = 15;
         const int DotEqualPrece = 1;
         public static int Operator(otyParnum op)
@@ -27,6 +28,7 @@ namespace otypar
                     return 1;
                 case otyParnum.modulo:
                 case otyParnum.multiply:
+                case otyParnum.division:
                     return 4;
                 case otyParnum.minus:
                 case otyParnum.plus:
@@ -63,7 +65,7 @@ namespace otypar
                         if (data.result[index - 1].otyParnum == otyParnum.identifier)
                         {
                             otyObj df = otyObj.NULL;
-                            if (scoped) 
+                          //  if (scoped) 
                                 df = data;
                             List<otyObj> param = new List<otyObj>(); //index++;
                             int parent = 0;
@@ -98,7 +100,13 @@ namespace otypar
                                     index++;
                                     //
                                 } 
-                                if (r[index].otyParnum == otyParnum.comma) { continue; }
+                                if (r[index].otyParnum == otyParnum.comma) { 
+                                    continue;
+                                }
+                                if (r[index].otyParnum == otyParnum.rightparent)
+                                {
+                                    continue;
+                                }
                                 /*if (r[index].otyParnum == otyParnum.rightparent)
                                 {
                                     index = ii + 1;
@@ -113,8 +121,11 @@ namespace otypar
                                     obj = Eval(new otyObj(/*getObj*/(data.result[index].Obj), data.result, index));
                                 index = obj.index;
 
-                                data = new otyObj(obj.Obj, data.result, index);
-                                param.Add(data);
+                                //if (!obj.isNull())
+                                {
+                                    data = new otyObj(obj.Obj, data.result, index);
+                                    param.Add(data);
+                                }
 
                                 //if (r[index].otyParnum == otyParnum.rightparent) { index++; break; }
                                     
@@ -145,7 +156,7 @@ namespace otypar
                             otyObj result;
                             if (!scoped)
                             {
-                                result = this.DefFunc.RunFunc(oo.result[oo.index/*-1*/].Name, param);
+                                result = this.DefFunc.RunFunc(oo.result[oo.index].Name, param, this);//result = this.DefFunc.RunFunc(oo.result[oo.index/*-1*/].Name, param,this);
                             }
                             else
                             {
@@ -362,6 +373,20 @@ namespace otypar
                         index++; j = r[index];
                         if (Operator(j.otyParnum) >= ModuloPrece) { index--; opera = 17;
                         k = r[index-1]; goto start;
+                        }
+                        break;
+                    case otyParnum.division:
+                        if (opera < DivisionPrece) break;
+                        index++;
+                        obj = Eval(new otyObj(/*getObj*/(data.result[index].Obj), data.result, index), ModuloPrece);
+                        index = obj.index;
+                        data.index = index;
+                        data.Division(obj);
+                        index++; j = r[index];
+                        if (Operator(j.otyParnum) >= DivisionPrece)
+                        {
+                            index--; opera = 17;
+                            k = r[index - 1]; goto start;
                         }
                         break;
                 }

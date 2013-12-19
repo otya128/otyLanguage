@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace otypar
 {
-    public class otyFunc
+    public partial class otyFunc
     {
-        public otyObj RunFunc(string name,List<otyObj> oo)
+        public otyObj RunFunc(string name,List<otyObj> oo,otyRun or)
         {
             try
             {
@@ -17,7 +17,14 @@ namespace otypar
                     case "print":
                         foreach (var i in oo)
                         {
-                            Console.Write(i.Obj + "\t");
+                            if (i.isNull())
+                            {
+                                Console.Write("[Null]\t");
+                            }
+                            else
+                            {
+                                Console.Write(i.Obj + "\t");
+                            }
                         }
                        // Console.WriteLine();
                         break;
@@ -29,9 +36,24 @@ namespace otypar
                         return new otyObj(Convert.ToInt32(oo[0].Obj));
                     case "todbl":
                         return new otyObj(Convert.ToDouble(oo[0].Obj));
+                    default:
+                        var scope = new otyRun(new otypar
+                        {
+                            result = or.result//result = this.result.GetRange(i + 1, this.result.Count - i - 1)
+                        }, this.Function[name].index+1, or);
+                        int j=0;
+                        foreach (var i in oo)
+                        {
+                            scope.Variable.Add(this.Function[name].Param[j],i);
+                                j++;
+                        }
+                        scope.FuncFlg = true;
+                        var result = scope.Run();
+                        return result;
+
                 }
             }
-            catch (ArgumentException)
+            catch (FormatException)//(ArgumentException)
             {
                 throw new ArgumentException("引数が足りません。"+name+"組み込み関数");
             }
@@ -72,6 +94,11 @@ namespace otypar
                 .Replace("\\t", "\t")
                 .Replace("\\a", "\a")
                 .Replace("\\a", "\a");
+        }
+
+        public otyFunc()
+        {
+            // TODO: Complete member initialization
         }
     }
 }

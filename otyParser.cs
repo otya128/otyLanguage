@@ -31,7 +31,7 @@ namespace otypar
         modulo,//%
         plusequal,//+=
         dot,//.
-
+        division,///
     }
     public class otyParc
     {
@@ -298,6 +298,9 @@ namespace otypar
                                         break;
                                     case '.':
                                         result.Add(new otyParc(otyParnum.dot, "."));
+                                        break;
+                                    case '/':
+                                        result.Add(new otyParc(otyParnum.division, "/"));
                                         break;
 
                                 }

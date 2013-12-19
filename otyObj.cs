@@ -13,6 +13,7 @@ namespace otypar
             return this.Obj == null;
         }
         public static otyObj NULL = new otyObj();
+        public static otyObj Void = new otyObj();//区別
         otyObj()
         {
         }
@@ -212,6 +213,18 @@ namespace otypar
                     break;
             }
         }
+        public void Division(otyObj arg2)
+        {
+            switch (this.Type)
+            {
+                case otyType.Int32:
+                    this.Num /= arg2.Num;
+                    break;
+                case otyType.Double:
+                    this.Double /= arg2.Double;
+                    break;
+            }
+        }
         public static otyType ToType(string type)
         {
             switch (type)
@@ -276,6 +289,13 @@ namespace otypar
         }
         public otyObj Func(string name, List<otyObj> arg)
         {
+            switch (name)
+            {
+                case"GetType":
+                    return new otyObj(this.Type.ToString());
+                case "GetCSType":
+                    return new otyObj(this.Obj.GetType().ToString());
+            }
             switch (this.Type)
             {
                 case otyType.Int32:
@@ -312,5 +332,7 @@ namespace otypar
             //return otyObj.NULL;
             throw new MissingMethodException("oty型"+this.Type+"に"+name+"関数の定義がありません。");
         }
+
+        
     }
 }

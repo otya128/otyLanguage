@@ -36,6 +36,7 @@ namespace otypar
             //int testt = (int)"";
             //Console.WriteLine(testt as int?);
             var op = new otypar();
+            Console.Title = "otylanguage - 関数テスト";
             string prg =
 @"pint i=0;int k=0;for(i=0;i<10;i++){
 k=0;
@@ -44,12 +45,35 @@ if(k==2){print(i);}
 }";
           //prg = @"print(1.ToString());";
             //"var k=0;print(k<10);var test=\"scopetest0\";for(var i=0;i<10;i++){var test=\"scopetest1\";print(test);print(i);}print(test);";// "var test=\"helllovar\";print(\"hello\"+\"world\"+(\"ahelllo\"+test));print(tostr(1));print(2*2+1,2*(2+1),(2*2)+1);";//"print(add(add(1,2),2));";//print(2*2+1,2*(2+1),1+i=1,add(add(1,2),2));i=i+1;i=i+1;print(i);;;;";
+            //FunctionTest
+            prg = @"print(addFuncTest(addFuncTest(1,2),2));int addFuncTest(int i,int k){return addFuncTest(i,k);return i+k;}";
+            prg =
+@"int main()
+{
+    for(int i=0;i<100;i++)
+    {
+        if(IsPrime(i)) print(i);
+    }
+}
+int IsPrime(int n)
+{
+    int i;
+    if(n < 2)  return 0;
+    if(n == 2) return 1;
+    if(n % 2 == 0) return 0;
+    for(i = 3; i <= n / i; i += 2)
+    {
+        if(n % i == 0) return 0;
+    }
+    return 1;
+}
+";
             op.Parse(prg); int j=1;
             // Console.WriteLine(1 + j = 1);
             Console.WriteLine(prg);
             foreach (var i in op.result)
             {
-                Console.WriteLine("{0}\t{1}", i.otyParnum, i.Name);
+                //Console.WriteLine("{0}\t{1}", i.otyParnum, i.Name);
             }
             var or = new otyRun(op);
             try
