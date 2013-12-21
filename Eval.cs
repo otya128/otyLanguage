@@ -86,15 +86,17 @@ namespace otypar
             var r = oo.result;
             var data = oo;
             var k = r[index];
-
+            bool func = false;
             if (index + 1 <= r.Count)
             {
             start:
                 switch (k.otyParnum)
                 {
-                    case otyParnum.leftparent: bool test = false;
-                        if (data.result[index - 1].otyParnum == otyParnum.identifier)
+                    case otyParnum.leftparent:
+                        bool test = false;
+                        if (data.result[index - 1].otyParnum == otyParnum.identifier||func)
                         {
+                        
                             otyObj df = otyObj.NULL;
                           //  if (scoped) 
                                 df = data;
@@ -188,9 +190,13 @@ namespace otypar
                             if (!scoped)
                             {
 
-                                if (this.Var.ContainsKey(oo.result[oo.index].Name))//df.Type == otyType.Function)
+                                if (this.Var.ContainsKey(oo.result[oo.index].Name)||df.Type == otyType.Function)
                                 {
-                                    var funcobj = this.Var[oo.result[oo.index].Name];
+                                    otyObj funcobj;
+                                    if (df.Type == otyType.Function) 
+                                        funcobj = df; 
+                                    else
+                                        funcobj = this.Var[oo.result[oo.index].Name];
                                     var scope = new otyRun(new otypar
                                     {
                                         result = this.result//result = this.result.GetRange(i + 1, this.result.Count - i - 1)
@@ -264,6 +270,7 @@ namespace otypar
                                 index = obj.index;
                                 data = new otyObj(obj.Obj, data.result, index);
                             }//if (r[index + 1].otyParnum != otyParnum.rightparent) goto case otyParnum.leftparent;
+
                             data.index++;
                             index++;
                             if (index + 1 <= r.Count)
@@ -310,6 +317,19 @@ namespace otypar
                         }
                         break;
                 }
+            if (data.Type == otyType.Function)
+            {
+                if (index + 1 <= r.Count)
+
+                    if (r[index + 1].otyParnum == otyParnum.leftparent)
+                    {
+                        //data.index++;
+                        index++;
+                        func = true; k = r[index];
+                        goto start;
+                    }
+                
+            }
             start2:
                 index++;
                 var j = r[index];

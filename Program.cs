@@ -173,7 +173,15 @@ aaa[0]=0;
     e = d % a;
     }
 }";
-            prg = @"int main(){print(printest.GetType());printest();func ahoge=printest;ahoge();}void printest(){print(""hoge"");}int max(int a){return max2;int max2(b){return a>b;}}";
+            prg = @"int main(){int gijiteki=0;max(1)(2)(3)(4)(5)(6);print("""",test(2)(40));print(printest.GetType());printest();func ahoge=printest;ahoge();}void printest(){print(""hoge"");}int max(int a){printf(""{0}"",a);return max;}//int max2(b){print(""b"");}}
+int test(int a){
+  gijiteki = a;
+  int test2(int b){
+    return gijiteki + b;
+  }
+  return test2;
+}
+";
             op.Parse(prg); int j=1;
             // Console.WriteLine(1 + j = 1);
             Console.WriteLine(prg);
