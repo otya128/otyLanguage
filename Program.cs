@@ -131,6 +131,12 @@ int IsPrime(int n)
 ";
             prg =
 @"int main() {
+  int[10] ahoge;
+  ahoge[0]=1;
+  ahoge[0]++;
+  print(ahoge[0]);
+  ahoge[0]--;
+  print(ahoge[0]);
   int a = 10000;
   int c = 8400;
   int b;

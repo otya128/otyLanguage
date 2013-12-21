@@ -8,19 +8,21 @@ namespace otypar
 {
     public partial class otyRun
     {
-        const int PlusPrece = 5;
-        const int MinusPrece = 5;
-        const int GreaterPrece = 7;
-        const int GreaterEqualPrece = 7;
-        const int LessPrece = 7;
-        const int LessEqualPrece = 7;
-        const int EqualEqualPrece = 8;
-        const int MultiplyPrece = 4;
-        const int ModuloPrece = 4;
-        const int DivisionPrece = 4;
-        const int PlusEqualPrece = 15;
+        const int EqualPrece = 16;
+        const int PlusPrece = 6;
+        const int MinusPrece = 6;
+        const int GreaterPrece = 8;
+        const int GreaterEqualPrece = 8;
+        const int LessPrece = 8;
+        const int LessEqualPrece = 8;
+        const int EqualEqualPrece = 9;
+        const int MultiplyPrece = 5;
+        const int ModuloPrece = 5;
+        const int DivisionPrece = 5;
+        const int PlusEqualPrece = 16;
         const int DotEqualPrece = 1;
         const int ArrayPrece = 2;//2;
+        const int IncrementPrece = 2;
         public static int Operator(otyParnum op)
         {
             switch (op)
@@ -29,25 +31,49 @@ namespace otypar
                     return 1;
                 case otyParnum.leftbracket:
                     return ArrayPrece;
+                case otyParnum.plusplus:
+                case otyParnum.minusminus:
+                    return IncrementPrece;
                 case otyParnum.modulo:
                 case otyParnum.multiply:
                 case otyParnum.division:
-                    return 4;
+                    return 5;
                 case otyParnum.minus:
                 case otyParnum.plus:
-
-                    return 5;
+                    return 6;
+                case otyParnum.leftshift:
+                case otyParnum.rightshift:
+                    return 7;
                 case otyParnum.greater:
                 case otyParnum.greaterequal:
                 case otyParnum.less:
                 case otyParnum.lessequal:
-                    return 7;
-                case otyParnum.equalequal:
                     return 8;
-                case otyParnum.equal:
-                case otyParnum.plusequal:
-                case otyParnum.minusequal:
-                    return 15;
+                case otyParnum.equalequal:
+                case otyParnum.notequal:
+                    return 9;
+                case otyParnum.and:
+                    return 10;
+                case otyParnum.xor:
+                    return 11;
+                case otyParnum.or:
+                    return 12;
+                case otyParnum.andand:
+                    return 13;
+                case otyParnum.oror:
+                    return 14;
+                case otyParnum.equal://=    ＼
+                case otyParnum.plusequal://+= ＼
+                case otyParnum.minusequal://-   ＼
+                case otyParnum.divisionequal:// /=＼
+                case otyParnum.leftshiftequal://<<= ＼
+                case otyParnum.rightshiftequal://>>= /
+                case otyParnum.multiplyequal: //*=  /
+                case otyParnum.moduloequal:  //%=  /
+                case otyParnum.andequal:    //&=  /
+                case otyParnum.xorequal:   //^=  /
+                case otyParnum.orequal:   //|=  /
+                    return 16;
                 default:
                     return 0;
             }
@@ -244,16 +270,7 @@ namespace otypar
                                 //this.Var[r[index].Name].result = r;
                                 //this.Var[r[index].Name].index = index;
                                 data = new otyObj(getObj(k), r, oo.index);//this.Var[r[index].Name];
-                                if (r[index + 1].otyParnum == otyParnum.plusplus)
-                                {
-                                    this.Var/*iable*/[r[index].Name].Increment();
-                                    index++;
-                                }else
-                                if (r[index + 1].otyParnum == otyParnum.minusminus)
-                                {
-                                    this.Var/*iable*/[r[index].Name].Decrement();
-                                    index++;
-                                }
+                                
                             }
                         /*else if (index + 2 <= r.Count)
 
@@ -306,6 +323,7 @@ namespace otypar
                         index++; j = r[index]; if (Operator(j.otyParnum) >= PlusEqualPrece) { index--; opera = 17; k = r[index - 1]; goto start; }
                         break;
                     case otyParnum.equal:
+                        if (opera < EqualPrece) break;
                         index++;
                         obj = Eval(new otyObj(/*getObj*/(data.result[index].Obj), data.result, index));
                         index = obj.index;
@@ -322,7 +340,7 @@ namespace otypar
                             data.index = index;
                             data.Obj = obj.Obj;
                         }
-                            index++; j = r[index]; if (Operator(j.otyParnum) >= PlusEqualPrece) { index--; opera = 17; k = r[index - 1]; goto start; }
+                            index++; j = r[index]; if (Operator(j.otyParnum) >= EqualPrece) { index--; opera = 17; k = r[index - 1]; goto start; }
                         break;
                 }
                 switch (j.otyParnum)
@@ -472,7 +490,24 @@ namespace otypar
                         index++; j = r[index];
                         if (Operator(j.otyParnum) >= ArrayPrece) { index--; opera = 17;/* k = r[index - 1];*/ goto start2; }
                         break;
-                } 
+                    case otyParnum.plusplus:
+                        if (opera < IncrementPrece) break;
+                        if (k.otyParnum != otyParnum.identifier) throw new FormatException(k.otyParnum + "に代入できません。これはidentifierである必要がありまあす。");
+                        if (!isVar) this.Var/*iable*/[k.Name].Increment(); else data.Increment();
+
+                        index++;
+                        index++; j = r[index];
+                        if (Operator(j.otyParnum) >= IncrementPrece) { index--; opera = 17;/* k = r[index - 1];*/ goto start2; }
+                        break;
+                    case otyParnum.minusminus:
+                        if (opera < IncrementPrece) break;
+                        if (k.otyParnum != otyParnum.identifier) throw new FormatException(k.otyParnum + "に代入できません。これはidentifierである必要がありまあす。");
+                        if (!isVar) this.Var/*iable*/[k.Name].Decrement(); else data.Decrement();
+                        index++; j = r[index];
+                        if (Operator(j.otyParnum) >= IncrementPrece) { index--; opera = 17;/* k = r[index - 1];*/ goto start2; }
+                        index++;
+                        break;
+                }
                 switch (j.otyParnum)
                 {
                     case otyParnum.dot:

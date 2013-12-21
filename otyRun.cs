@@ -486,7 +486,7 @@ namespace otypar
                                 break;
                             case otyParnum.leftbracket:
                                 int ar = this.ArraySkip(i, -1) + 1;
-                                if (result[ar].otyParnum == otyParnum.equal)
+                                if (result[ar].otyParnum != otyParnum.identifier)
                                 {
                                     obj = Eval(new otyObj(this.Var/*iable*/[result[i - 1].Name], result, i - 1));
                                     i = obj.index;

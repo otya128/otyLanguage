@@ -14,15 +14,15 @@ namespace otypar
         doublequote, str,
         leftparent,//(
         rightparent,//)
-        comma,
-        plus,
-        minus,
-        multiply,
-        equal,
-        equalequal,
-        semicolon,
-        blockstart,
-        blockend,
+        comma,//,
+        plus,//+
+        minus,//-
+        multiply,//*
+        equal,//=
+        equalequal,//==
+        semicolon,//;
+        blockstart,//{
+        blockend,//}
         plusplus,//++
         minusminus,//--
         greater,//>
@@ -37,6 +37,25 @@ namespace otypar
         leftbracket,//[
         rightbracket,//]
         debbug_stop,//$
+        //追加演算子
+        multiplyequal,//*=
+        divisionequal,// /=
+        moduloequal,//%=
+        or,//|
+        oror,//||
+        and,//&
+        andand,//&&
+        xor,//^
+        notequal,//!
+        not,//~
+        notnot,//!LogicalNot
+        leftshift,//<<
+        rightshift,//>>
+        leftshiftequal,//<<=
+        rightshiftequal,//>>=
+        andequal,//&=
+        orequal,//|=
+        xorequal,//^=
     }
     public class otyParc
     {
