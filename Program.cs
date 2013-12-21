@@ -27,6 +27,11 @@ namespace otypar
 
         static void Main(string[] args)
         {
+            int[] hoge2 = { 0, 1, 2 };
+            var hoge3 = hoge2;
+            hoge3[1] = 9;
+            Console.WriteLine(hoge2[1]);
+            Console.WriteLine(hoge3[1]);
             object hoge = new 麿();
             hoge = (引きニートになってふともものきれいな女の子とイチャイチャして幸せに暮らせるようになりたいけどなれない)hoge;
             new 引きニートになってふともものきれいな女の子とイチャイチャして幸せに暮らせるようになりたいけどなれない(new 引きニートになってふともものきれいな女の子とイチャイチャして幸せに暮らせるようになりたいけどなれない());
@@ -36,7 +41,7 @@ namespace otypar
             //int testt = (int)"";
             //Console.WriteLine(testt as int?);
             var op = new otypar();
-            Console.Title = "otylanguage - 関数テスト";
+            Console.Title = "otylanguage - 円周率テスト";
             string prg =
 @"pint i=0;int k=0;for(i=0;i<10;i++){
 k=0;
@@ -47,9 +52,65 @@ if(k==2){print(i);}
             //"var k=0;print(k<10);var test=\"scopetest0\";for(var i=0;i<10;i++){var test=\"scopetest1\";print(test);print(i);}print(test);";// "var test=\"helllovar\";print(\"hello\"+\"world\"+(\"ahelllo\"+test));print(tostr(1));print(2*2+1,2*(2+1),(2*2)+1);";//"print(add(add(1,2),2));";//print(2*2+1,2*(2+1),1+i=1,add(add(1,2),2));i=i+1;i=i+1;print(i);;;;";
             //FunctionTest
             prg = @"print(addFuncTest(addFuncTest(1,2),2));int addFuncTest(int i,int k){return addFuncTest(i,k);return i+k;}";
+            //endtoken設定=デフォルト}、埋め込み;
             prg =
 @"int main()
 {
+print((sin(1.0))/10.0);
+print((1.GetType()+""1"").Replace(""321"",""64""));
+int[100] ahooge;
+int[100] ahooge2;
+print(ahooge[0]=ahooge2);
+print(ahooge[0][0]=1);
+print((ahooge[0][0])+1);
+ahooge[0]=1;
+print(ahooge[0]);
+print(ahooge=1);
+print(""\r\n"");
+int a = 10000;
+int c = 8400;
+int b;
+int d;
+int e;
+int g;
+int[8401] f;
+for( b = 0 ; b <= c ; b++ ) {
+    f[b] = a / 5;
+  }
+  e = 0;
+  c=8400;
+    d = 0;
+    for( b = 8399 ; b > 0 ; b-- ) {
+      g = 2 * b;g=g - 1;
+      d = (d * b);d=d+(2000 * a);
+      d = d / g;
+    }
+    print(d / a);
+    e = d % a;
+  int a = 10000;
+int c = 8400;
+int b;
+int d;
+int e;
+int g;
+int[8401] f;
+for( b = 0 ; b <= c ; b++ ) {
+    f[b] = a / 5;
+  }
+  e = 0;
+  for( c = 8400 ; c > 0 ; c -= 14 ) {
+    d = 0;
+    for( b = c - 1 ; b > 0 ; b-- ) {
+      g = 2 * b - 1;
+      d = d * b + (f[b]) * a;
+      f[b] = d % g;
+      d = d / g;
+    }
+    printf(""{0:D4}"",e +d / a);
+    e = d % a;
+  }
+
+print(""\r\n"");
     for(int i=0;i<100;i++)
     {
         if(IsPrime(i)) print(i);
@@ -68,6 +129,32 @@ int IsPrime(int n)
     return 1;
 }
 ";
+            prg =
+@"int main() {
+  int a = 10000;
+  int c = 8400;
+  int b;
+  int d;
+  int e;
+  int g;
+  int[8401] f;
+  for( b = 0 ; b <= c ; b++ ) {
+      f[b] = a / 5;
+  }
+  e = 0;//Comment
+  print(""PI="");
+  for( c = 8400 ; c > 0 ; c -= 14 ) {
+    d = 0;
+    for( b = c - 1 ; b > 0 ; b-- ) {
+      g = 2 * b - 1;
+      d = d * b + f[b] * a;
+      f[b] = d % g;
+      d = d / g;
+    }
+    printf(""{0:D4}"",e +d / a);
+    e = d % a;
+    }
+}";
             op.Parse(prg); int j=1;
             // Console.WriteLine(1 + j = 1);
             Console.WriteLine(prg);

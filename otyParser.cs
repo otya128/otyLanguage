@@ -23,15 +23,20 @@ namespace otypar
         semicolon,
         blockstart,
         blockend,
-        plusplus,
+        plusplus,//++
+        minusminus,//--
         greater,//>
         less,//<
         greaterequal,//>=
         lessequal,//<=
         modulo,//%
         plusequal,//+=
+        minusequal,//-=
         dot,//.
         division,///
+        leftbracket,//[
+        rightbracket,//]
+        debbug_stop,//$
     }
     public class otyParc
     {
@@ -89,9 +94,10 @@ namespace otypar
         private enum otyparstate
         {
             None, IdenRead, NumRead, StrRead, DoubleRead,
-            EscapeRead,
+            EscapeRead,LineCommentRead,CommentRead,
         }
         public List<otyParc> result = new List<otyParc>();
+        
         public void Parse(string p)
         {
             var state = otyparstate.None;
@@ -203,8 +209,13 @@ namespace otypar
                             case 'f':
                                 iden += "\f";
                                 break;
+                            default:
+                                throw new FormatException("認識できないエスケープシーケンス'\\"+j+"'");
                         }
                         state=otyparstate.StrRead;
+                        break;
+                    case otyparstate.LineCommentRead:
+                        if (j == '\n') state = otyparstate.None;
                         break;
                     case otyparstate.None:
                         if (IsAlpha(j))
@@ -249,6 +260,23 @@ namespace otypar
                                                 break;
                                             }
                                         result.Add(new otyParc(otyParnum.plus, "+"));
+
+                                        break;
+                                    case '-':
+                                        if (i + 1 < p.Length)
+                                            if (p[i + 1] == '-')
+                                            {
+                                                result.Add(new otyParc(otyParnum.minusminus, "--"));
+                                                i++;
+                                                break;
+                                            }
+                                            else if (p[i + 1] == '=')
+                                            {
+                                                result.Add(new otyParc(otyParnum.minusequal, "-="));
+                                                i++;
+                                                break;
+                                            }
+                                        result.Add(new otyParc(otyParnum.minus, "-"));
 
                                         break;
                                     case '*':
@@ -300,9 +328,29 @@ namespace otypar
                                         result.Add(new otyParc(otyParnum.dot, "."));
                                         break;
                                     case '/':
+                                        if (i + 1 < p.Length)
+                                            if (p[i + 1] == '/') { i++; state = otyparstate.LineCommentRead; break; }
                                         result.Add(new otyParc(otyParnum.division, "/"));
                                         break;
-
+                                    case '[':
+                                        result.Add(new otyParc(otyParnum.leftbracket, "["));
+                                        break;
+                                    case ']':
+                                        result.Add(new otyParc(otyParnum.rightbracket, "]"));
+                                        break;
+                                    case '$':
+                                        result.Add(new otyParc(otyParnum.debbug_stop, "$"));
+                                        break;
+                                    case '\r':
+                                    case '\n':
+                                    case ' ':
+                                    case '　':
+                                    case '\a':
+                                    case '\f':
+                                    case '\t':
+                                        break;
+                                    default:
+                                        throw new FormatException("認識できない文字'" + j + "'");
                                 }
                             }
                         break;
@@ -324,6 +372,10 @@ namespace otypar
                     state = otyparstate.None;
                     break;
             }
+        }
+        bool isIden(char p)
+        {
+            return IsAlphaOrNum(p) || p == '_';
         }
         bool IsAlphaOrNum(char p)
         {

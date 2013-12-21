@@ -8,7 +8,7 @@ namespace otypar
 {
     public enum otyType
     {
-        Object,Int32,Double,String,
+        Object,Int32,Double,String,Array,
     }/*
     public class otyType
     {
@@ -202,6 +202,28 @@ namespace otypar
             }
             return index;
         }
+        int ArraySkip(int index, int block = 0)
+        {
+            while (index < result.Count)
+            {
+                var j = result[index];
+                switch (j.otyParnum)
+                {
+                    case otyParnum.leftbracket:
+                        block++;
+                        break;
+                    case otyParnum.rightbracket:
+                        block--;
+                        if (block == -1)
+                            return index;
+                        break;
+                }
+
+                index++;
+
+            }
+            return index;
+        }
         int StateSkip(int index)
         {
             while (index < result.Count)
@@ -226,7 +248,7 @@ namespace otypar
                 var j = result[index];
                 if (j.otyParnum == otyParnum.leftparent)
                 {
-                    var cond = Eval(new otyObj(null, result, index));
+                    var cond = Eval(otyObj.CreateNullObj(result, index));//new otyObj(null, result, index));
                     index = cond.index;
                     if (cond.Num != 0)
                     {
@@ -314,7 +336,7 @@ namespace otypar
                                         result = this.result//result = this.result.GetRange(i + 1, this.result.Count - i - 1)
                                     }, i + 1, this);
                                     forscope.StateRun(forstate1);
-                                    var res = forscope.Eval(new otyObj(null, forscope.result, forstate2));
+                                    var res = forscope.Eval(otyObj.CreateNullObj(forscope.result, forstate2));//new otyObj(null, forscope.result, forstate2));
                                     if (res.Num == 1)
                                     {
 
@@ -325,7 +347,7 @@ namespace otypar
                                             return scopereslut;
                                         } 
                                         i = forscope.index - 1;
-                                        forscope.Eval(new otyObj(null, forscope.result, forstate3));
+                                        forscope.Eval(otyObj.CreateNullObj(forscope.result, forstate3));//new otyObj(null, forscope.result, forstate3));
                                     }
                                     else
                                     {
@@ -341,7 +363,7 @@ namespace otypar
                                 else
                                 {
 
-                                    if (forscope.Eval(new otyObj(null, forscope.result, forstate2)).Num == 1)
+                                    if (forscope.Eval(/*new otyObj(null, forscope.result, forstate2)*/otyObj.CreateNullObj(forscope.result,forstate2)).Num == 1)
                                     {
 
                                         var scopereslut = forscope.Run();
@@ -351,7 +373,7 @@ namespace otypar
                                             return scopereslut;
                                         } 
                                         i = forscope.index - 1;
-                                        forscope.Eval(new otyObj(null, forscope.result, forstate3));
+                                        forscope.Eval(otyObj.CreateNullObj(forscope.result, forstate3));//new otyObj(null, forscope.result, forstate3));
                                     }
                                     else
                                     {
@@ -377,6 +399,8 @@ namespace otypar
                     case otyrunstate.None:
                         switch (j.otyParnum)
                         {
+                            case otyParnum.debbug_stop:
+                                break;
                             case otyParnum.identifier:
                                 switch (j.Name)
                                 {
@@ -459,6 +483,20 @@ namespace otypar
                                 i = obj.index;
                                 //Console.Write(j.otyParnum);Console.WriteLine(obj.Obj);
                                 state = otyrunstate.None;
+                                break;
+                            case otyParnum.leftbracket:
+                                int ar = this.ArraySkip(i, -1) + 1;
+                                if (result[ar].otyParnum == otyParnum.equal)
+                                {
+                                    obj = Eval(new otyObj(this.Var/*iable*/[result[i - 1].Name], result, i - 1));
+                                    i = obj.index;
+                                    state = otyrunstate.None;
+                                    break;
+                                }
+                                //配列宣言
+                                obj = Eval(new otyObj(result[i + 1].Obj, result, i + 1));
+                                i = ar;
+                                this.Variable[result[i].Name] = otyObj.CreateArrayObj((int)obj.Num, this.result, i, otyType.Object);//new otyObj(new otyObj[(int)obj.Num], this.result, i, otyType.Array);
                                 break;
                             default:
                                 obj = Eval(new otyObj(this.Var/*iable*/[result[i - 1].Name], result, i - 1));

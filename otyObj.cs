@@ -17,6 +17,30 @@ namespace otypar
         otyObj()
         {
         }
+        public static otyObj CreateNullObj(List<otyParc> r, int i)
+        {
+            return new otyObj((object)null,r,i,otyType.Object);
+        }
+        public static otyObj CreateArrayObj(int length,List<otyParc> r, int i,otyType Type)
+        {
+            var obj = new otyObj[length];
+            switch (Type)
+            {
+                case otyType.Int32:
+                    for (int j = 0; j < length; j++)
+                    {
+                        obj[j] = new otyObj(0);
+                    }
+                    break;
+                case otyType.Object:
+                    for (int j = 0; j < length; j++)
+                    {
+                        obj[j] = new otyObj((object)null);
+                    }
+                    break;
+            }
+            return new otyObj(obj, r, i, otyType.Array);
+        }
         public otyObj(object obj, List<otyParc> r, int i, otyType Type = otyType.Object)
         {
             this.Type = Type;
@@ -38,6 +62,13 @@ namespace otypar
             this.result = r;
             this.index = i;
         }
+        public otyObj(otyObj[] obj, List<otyParc> r, int i, otyType Type = otyType.Array)
+        {
+            this.Type = Type;
+            this.Array = obj;
+            this.result = r;
+            this.index = i;
+        }
         public otyObj(object obj)
         {
             this.Obj = obj;
@@ -49,6 +80,10 @@ namespace otypar
         public otyObj(string obj)
         {
             this.Str = obj;
+        }
+        public otyObj(otyObj[] obj)
+        {
+            this.Array = obj;
         }
         public void Add(otyObj arg2)
         {
@@ -63,6 +98,19 @@ namespace otypar
                     break;
                 case otyType.String:
                     if (arg2.Obj != null) this.Str += arg2.Obj.ToString();
+                    break;
+            }
+        }
+        public void Sub(otyObj arg2)
+        {
+
+            switch (this.Type)
+            {
+                case otyType.Int32:
+                    this.Num -= arg2.Num;//new otyObj(arg1.Num + arg2.Num);
+                    break;
+                case otyType.Double:
+                    this.Double -= arg2.Double;//new otyObj(arg1.Num + arg2.Num);
                     break;
             }
         }
@@ -86,11 +134,25 @@ namespace otypar
                     else
                         if (value.GetType().Name == "String")
                             Type = otyType.String;
+                        else if (value.GetType().Name == "otyObj[]")
+                            Type = otyType.Array;
                 obj = value;
             }
         }
         public List<otyParc> result;
         public int index;
+        public otyObj[] Array
+        {
+            get
+            {
+                return (otyObj[])this.Obj;
+            }
+            set
+            {
+                this.Type = otyType.Array;
+                this.Obj = value;
+            }
+        }
         public int? Num
         {
             get
@@ -137,6 +199,18 @@ namespace otypar
                     break;
                 case otyType.Double:
                     this.Double++;
+                    break;
+            }
+        }
+        public void Decrement()
+        {
+            switch (this.Type)
+            {
+                case otyType.Int32:
+                    this.Num--;
+                    break;
+                case otyType.Double:
+                    this.Double--;
                     break;
             }
         }
