@@ -173,6 +173,7 @@ aaa[0]=0;
     e = d % a;
     }
 }";
+            prg = @"int main(){print(printest.GetType());printest();func ahoge=printest;ahoge();}void printest(){print(""hoge"");}int max(int a){return max2;int max2(b){return a>b;}}";
             op.Parse(prg); int j=1;
             // Console.WriteLine(1 + j = 1);
             Console.WriteLine(prg);

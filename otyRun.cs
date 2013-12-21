@@ -8,7 +8,7 @@ namespace otypar
 {
     public enum otyType
     {
-        Object,Int32,Double,String,Array,
+        Object,Int32,Double,String,Array,Function,
     }/*
     public class otyType
     {
@@ -95,6 +95,32 @@ namespace otypar
             }
             throw new ArgumentException("変数" + name + "が存在しません。");
         }
+        public bool ContainsKey(string name)
+        {
+            if (this.Variable.Variable.ContainsKey(name))
+            {
+                return true;
+
+            }
+            if (this.Variable.Parent != otyRun.Empty)
+            {
+                return ContainsKey(this.Variable.Parent, name);
+            }
+            return false;
+        }
+        public bool ContainsKey(otyRun ov, string name)
+        {
+            if (ov.Variable.ContainsKey(name))
+            {
+                return true;
+                
+            }
+            if (ov.Parent != otyRun.Empty)
+            {
+                return ContainsKey(ov.Parent, name);
+            }
+            return false;
+        }
     }
     public partial class otyRun
     {
@@ -130,7 +156,7 @@ namespace otypar
             Var = new otyVar { Variable = this };
             this.Variable = new Dictionary<string, otyObj>();
             this.result = r.result;
-            this.defFunc = new otyFunc(r);
+            this.defFunc = new otyFunc(r,this);
             if (defFunc.Function.ContainsKey("main"))
             {
                 //main!!!!!!!!!!11

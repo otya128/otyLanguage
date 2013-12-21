@@ -85,6 +85,10 @@ namespace otypar
         {
             this.Array = obj;
         }
+        public otyObj(otyFuncObj obj)
+        {
+            this.Function = obj;
+        }
         public void Add(otyObj arg2)
         {
 
@@ -131,11 +135,13 @@ namespace otypar
                     else
                         if (value.GetType().Name == "Double")
                             Type = otyType.Double;
-                    else
-                        if (value.GetType().Name == "String")
-                            Type = otyType.String;
-                        else if (value.GetType().Name == "otyObj[]")
-                            Type = otyType.Array;
+                        else
+                            if (value.GetType().Name == "String")
+                                Type = otyType.String;
+                            else if (value.GetType().Name == "otyObj[]")
+                                Type = otyType.Array;
+                            else if (value.GetType().Name == "otyFuncObj")
+                                Type = otyType.Function;
                 obj = value;
             }
         }
@@ -150,6 +156,18 @@ namespace otypar
             set
             {
                 this.Type = otyType.Array;
+                this.Obj = value;
+            }
+        }
+        public otyFuncObj Function
+        {
+            get
+            {
+                return (otyFuncObj)this.Obj;
+            }
+            set
+            {
+                this.Type = otyType.Function;
                 this.Obj = value;
             }
         }

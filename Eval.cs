@@ -187,6 +187,24 @@ namespace otypar
                             otyObj result;
                             if (!scoped)
                             {
+
+                                if (this.Var.ContainsKey(oo.result[oo.index].Name))//df.Type == otyType.Function)
+                                {
+                                    var funcobj = this.Var[oo.result[oo.index].Name];
+                                    var scope = new otyRun(new otypar
+                                    {
+                                        result = this.result//result = this.result.GetRange(i + 1, this.result.Count - i - 1)
+                                    }, funcobj.Function.index + 1, this);
+                                    int jk = 0;
+                                    foreach (var ik in param)
+                                    {
+                                        scope.Variable.Add(funcobj.Function.Param[jk], ik);
+                                        jk++;
+                                    }
+                                    scope.FuncFlg = true;
+                                    result = scope.Run();
+                                }
+                                else
                                 result = this.DefFunc.RunFunc(oo.result[oo.index].Name, param, this);//result = this.DefFunc.RunFunc(oo.result[oo.index/*-1*/].Name, param,this);
                             }
                             else
