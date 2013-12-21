@@ -328,6 +328,12 @@ namespace otypar
                                                 i++;
                                                 break;
                                             }
+                                            else if (p[i + 1] == '<')
+                                            {
+                                                result.Add(new otyParc(otyParnum.leftshift, "<<"));
+                                                i++;
+                                                break;
+                                            }
                                         result.Add(new otyParc(otyParnum.less, "<"));
                                         break;
                                     case '>':
@@ -335,6 +341,12 @@ namespace otypar
                                             if (p[i + 1] == '=')
                                             {
                                                 result.Add(new otyParc(otyParnum.greaterequal, ">="));
+                                                i++;
+                                                break;
+                                            }
+                                            else if (p[i + 1] == '>')
+                                            {
+                                                result.Add(new otyParc(otyParnum.rightshift, ">>"));
                                                 i++;
                                                 break;
                                             }
@@ -359,6 +371,9 @@ namespace otypar
                                         break;
                                     case '$':
                                         result.Add(new otyParc(otyParnum.debbug_stop, "$"));
+                                        break;
+                                    case '&':
+                                        result.Add(new otyParc(otyParnum.and, "&"));
                                         break;
                                     case '\r':
                                     case '\n':

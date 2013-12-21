@@ -131,6 +131,8 @@ int IsPrime(int n)
 ";
             prg =
 @"int main() {
+int hogee=0;
+print(&1,&(1*20));
   int[10] ahoge;
   ahoge[0]=1;
   ahoge[0]++;
@@ -139,19 +141,25 @@ int IsPrime(int n)
   print(ahoge[0]);
   ahoge[0]--;
   print(ahoge[0]);
+  print(""hogehoge""2*2+3);
+  print(256>>1);
+  int[10] aaa;
+aaa[0]=0;
+  print(aaa[0]+1);
+  print(""arere""aaa[0]);//int a = 10000;int c = 8400;int b;int d;int e;int g;int[8401] f;for( b = 0 ; b <= c ; b++ ){f[b] = a / 5;}e = 0;print(""PI="");for( c = 8400 ; c > 0 ; c -= 14 ) {g = 2 * b - 1;d = d * b + (f[b]) * a;f[b] = d % g;d = d / g;}print(e +d / a);e = d % a;}
   int a = 10000;
-  int c = 8400;
+  int c = 1000;
   int b;
   int d;
   int e;
   int g;
-  int[8401] f;
+  int[1001] f;
   for( b = 0 ; b <= c ; b++ ) {
       f[b] = a / 5;
   }
   e = 0;//Comment
   print(""PI="");
-  for( c = 8400 ; c > 0 ; c -= 14 ) {
+  for( c = 1000 ; c > 0 ; c -= 14 ) {
     d = 0;
     for( b = c - 1 ; b > 0 ; b-- ) {
       g = 2 * b - 1;

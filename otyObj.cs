@@ -304,6 +304,34 @@ namespace otypar
                     break;
             }
         }
+        /// <summary>
+        /// &lt;&lt;
+        /// </summary>
+        /// <param name="arg2"></param>
+        public void LeftShift(otyObj arg2)
+        {
+            switch (this.Type)
+            {
+                case otyType.Int32:
+                    this.Num <<= arg2.Num;
+                    break;
+            }
+           // throw new InvalidOperationException("演算子<<をoty型'" + this.Type + "'とoty型'" + arg2.Type + "'に適用できません。");
+        }
+        /// <summary>
+        /// &gt;&gt;
+        /// </summary>
+        /// <param name="arg2"></param>
+        public void RightShift(otyObj arg2)
+        {
+            switch (this.Type)
+            {
+                case otyType.Int32:
+                    this.Num >>= arg2.Num;
+                    break;
+            }
+           // throw new InvalidOperationException("演算子>>をoty型'" + this.Type + "'とoty型'" + arg2.Type + "'に適用できません。");
+        }
         public static otyType ToType(string type)
         {
             switch (type)
@@ -402,6 +430,16 @@ namespace otypar
                             }
 
                             throw new ArgumentException("引数が足りません");
+                        case "ToString":
+                            return new otyObj(/*this.Num.ToString()*/this.Obj.ToString());
+                        default:
+                            throw new MissingMethodException("oty型" + this.Type + "に" + name + "関数の定義がありません。");
+                    }
+                case otyType.Array:
+                    switch (name)
+                    {
+                        case "Length":
+                            return new otyObj(this.Array.Length);
                         case "ToString":
                             return new otyObj(/*this.Num.ToString()*/this.Obj.ToString());
                         default:
