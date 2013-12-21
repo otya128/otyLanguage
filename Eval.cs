@@ -342,7 +342,9 @@ namespace otypar
                         data.Add(obj);
                         data.index = obj.index;
                         if (k.otyParnum != otyParnum.identifier) throw new FormatException(k.otyParnum + "に代入できません。これはidentifierである必要がありまあす。");
-                        this.Var[k.Name] = data;
+                       
+                        if (!isVar) this.Var[k.Name] = data;/* else
+                            data.Increment();*/
                         //data = new otyObj((int)data.Obj * ((int)obj.Obj), data.result, obj.index);
                         index++; j = r[index]; if (Operator(j.otyParnum) >= PlusEqualPrece) { index--; opera = 17; k = r[index - 1]; goto start; }
                         break;
@@ -356,6 +358,23 @@ namespace otypar
                         if (k.otyParnum != otyParnum.identifier) throw new FormatException(k.otyParnum + "に代入できません。これはidentifierである必要がありまあす。");
                         this.Var[k.Name] = data;
                         //data = new otyObj((int)data.Obj * ((int)obj.Obj), data.result, obj.index);
+                        index++; j = r[index]; if (Operator(j.otyParnum) >= PlusEqualPrece) { index--; opera = 17; k = r[index - 1]; goto start; }
+                        break;
+                    case otyParnum.divisionequal:
+                        if (opera < PlusEqualPrece) break;
+                        index++;
+                        obj = Eval(new otyObj(data.result[index].Obj, data.result, index), PlusEqualPrece);
+                        index = obj.index;
+                        data.Division(obj);
+                        data.index = obj.index;
+                        if (k.otyParnum != otyParnum.identifier) throw new FormatException(k.otyParnum + "に代入できません。これはidentifierである必要がありまあす。");
+                        this.Var[k.Name] = data;
+                        index++; j = r[index]; if (Operator(j.otyParnum) >= PlusEqualPrece) { index--; opera = 17; k = r[index - 1]; goto start; }
+                        break;
+                    case otyParnum.multiplyequal:
+                        index++; j = r[index]; if (Operator(j.otyParnum) >= PlusEqualPrece) { index--; opera = 17; k = r[index - 1]; goto start; }
+                        break;
+                    case otyParnum.moduloequal:
                         index++; j = r[index]; if (Operator(j.otyParnum) >= PlusEqualPrece) { index--; opera = 17; k = r[index - 1]; goto start; }
                         break;
                     case otyParnum.equal:

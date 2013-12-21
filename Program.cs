@@ -132,7 +132,8 @@ int IsPrime(int n)
             prg =
 @"int main() {
 int hogee=0;
-print(&1,&(1*20));
+object test;
+print(&hogee,&(1*20),&1);
   int[10] ahoge;
   ahoge[0]=1;
   ahoge[0]++;
@@ -140,9 +141,10 @@ print(&1,&(1*20));
   print(ahoge[0]==0);
   print(ahoge[0]);
   ahoge[0]--;
-  print(ahoge[0]);
+ahoge[0]+=100;
+  print(ahoge[0],""aaaaaaaaaaaa"",ahoge[0]);
   print(""hogehoge""2*2+3);
-  print(256>>1);
+  print(256<<1);
   int[10] aaa;
 aaa[0]=0;
   print(aaa[0]+1);

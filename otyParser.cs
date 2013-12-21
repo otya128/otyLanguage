@@ -299,6 +299,8 @@ namespace otypar
 
                                         break;
                                     case '*':
+                                        if (i + 1 < p.Length)
+                                            if (p[i + 1] == '=') { result.Add(new otyParc(otyParnum.multiplyequal, "*=")); i++; break; }
                                         result.Add(new otyParc(otyParnum.multiply, "*"));
                                         break;
                                     case '=':
@@ -353,6 +355,8 @@ namespace otypar
                                         result.Add(new otyParc(otyParnum.greater, ">"));
                                         break;
                                     case '%':
+                                        if (i + 1 < p.Length)
+                                            if (p[i + 1] == '=') { result.Add(new otyParc(otyParnum.moduloequal, "%=")); i++; break; }
                                         result.Add(new otyParc(otyParnum.modulo, "%"));
                                         break;
                                     case '.':
@@ -361,6 +365,7 @@ namespace otypar
                                     case '/':
                                         if (i + 1 < p.Length)
                                             if (p[i + 1] == '/') { i++; state = otyparstate.LineCommentRead; break; }
+                                            else if (p[i + 1] == '=') { result.Add(new otyParc(otyParnum.divisionequal, "/=")); i++; break; }
                                         result.Add(new otyParc(otyParnum.division, "/"));
                                         break;
                                     case '[':
