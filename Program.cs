@@ -135,6 +135,8 @@ int IsPrime(int n)
   ahoge[0]=1;
   ahoge[0]++;
   print(ahoge[0]);
+  print(ahoge[0]==0);
+  print(ahoge[0]);
   ahoge[0]--;
   print(ahoge[0]);
   int a = 10000;

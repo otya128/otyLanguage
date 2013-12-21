@@ -215,65 +215,70 @@ namespace otypar
             }
         }
 
-        internal void Less(otyObj arg2)
+        public otyObj Less(otyObj arg2)
         {
             switch (this.Type)
             {
                 case otyType.Int32:
-                    if (this.Num < arg2.Num) this.Num = 1; else this.Num = 0;
+                    if (this.Num < arg2.Num) return new otyObj(1); else return new otyObj(0);
                     break;
                 case otyType.Double:
-                    if (this.Double < arg2.Double) this.Double = 1; else this.Double = 0;
+                    if (this.Double < arg2.Double) return new otyObj(1); else return new otyObj(0);
                     break;
             }
+            throw new InvalidOperationException("oty型'" + this.Type + "'とoty型'" + arg2.Type + "'は比較できません。");
         }
-        public void Greater(otyObj arg2)
+        public otyObj Greater(otyObj arg2)
         {
             switch (this.Type)
             {
                 case otyType.Int32:
-                    if (this.Num > arg2.Num) this.Num = 1; else this.Num = 0;
+                    if (this.Num > arg2.Num) return new otyObj(1); else return new otyObj(0);
                     break;
                 case otyType.Double:
-                    if (this.Double > arg2.Double) this.Double = 1; else this.Double = 0;
+                    if (this.Double > arg2.Double) return new otyObj(1); else return new otyObj(0);
                     break;
-            }
+            } 
+            throw new InvalidOperationException("oty型'" + this.Type + "'とoty型'" + arg2.Type + "'は比較できません。");
         }
-        internal void LessEqual(otyObj arg2)
+        public otyObj LessEqual(otyObj arg2)
         {
             switch (this.Type)
             {
                 case otyType.Int32:
-                    if (this.Num <= arg2.Num) this.Num = 1; else this.Num = 0;
+                    if (this.Num <= arg2.Num) return new otyObj(1); else return new otyObj(0);
                     break;
                 case otyType.Double:
-                    if (this.Double <= arg2.Double) this.Double = 1; else this.Double = 0;
+                    if (this.Double <= arg2.Double) return new otyObj(1); else return new otyObj(0);
                     break;
             }
+            throw new InvalidOperationException("oty型'" + this.Type + "'とoty型'" + arg2.Type + "'は比較できません。");
         }
-        public void GreaterEqual(otyObj arg2)
+        public otyObj GreaterEqual(otyObj arg2)
         {
             switch (this.Type)
             {
                 case otyType.Int32:
-                    if (this.Num >= arg2.Num) this.Num = 1; else this.Num = 0;
+                    if (this.Num >= arg2.Num) return new otyObj(1); else return new otyObj(0);
                     break;
                 case otyType.Double:
-                    if (this.Double >= arg2.Double) this.Double = 1; else this.Double = 0;
+                    if (this.Double >= arg2.Double) return new otyObj(1); else return new otyObj(0);
                     break;
             }
+            throw new InvalidOperationException("oty型'" + this.Type + "'とoty型'" + arg2.Type + "'は比較できません。");
         }
-        public void Equal(otyObj arg2)
+        public otyObj Equal(otyObj arg2)
         {
             switch (this.Type)
             {
                 case otyType.Int32:
-                    if (this.Num == arg2.Num) this.Num = 1; else this.Num = 0;
-                    break;
+                    if (this.Num == arg2.Num) return new otyObj(1); else return new otyObj(0);
                 case otyType.Double:
-                    if (this.Double == arg2.Double) this.Double = 1; else this.Double = 0;
-                    break;
+                    if (this.Double == arg2.Double) return new otyObj(1); else return new otyObj(0);
+                case otyType.String:
+                    if (this.Str == arg2.Str) return new otyObj(1); else return new otyObj(0);
             }
+            if (this.Obj == arg2.Obj) return new otyObj(1); else return new otyObj(0);
         }
         public void Modulo(otyObj arg2)
         {
