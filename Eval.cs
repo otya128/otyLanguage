@@ -255,6 +255,22 @@ namespace otypar
                                         data.Cast(type);
                                         break;
                                     }
+                                    else if (r[index + 2].otyParnum == otyParnum.multiply)
+                                    {
+                                        if (index + 3 <= r.Count)
+                                        {
+                                            if (r[index + 3].otyParnum == otyParnum.rightparent)
+                                            {
+                                                string type = r[index + 1].Name;
+                                                index += 4;
+                                                var obj = Eval(new otyObj(/*getObj*/(data.result[index].Obj), data.result, index));
+                                                index = obj.index;
+                                                data = new otyObj(obj.Obj, data.result, index);
+                                                data = data.PtrCast(type); data.result = r; data.index = index;
+                                                break;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                             var iii = this.ParentSkip(index,-1)+1;

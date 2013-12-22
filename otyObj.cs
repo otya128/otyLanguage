@@ -412,6 +412,25 @@ namespace otypar
                     break;
             }
         }
+        public unsafe otyObj PtrCast(string type)
+        {
+            var t = otyObj.ToType(type);
+            if (this.Type != otyType.Int32)
+            {
+                throw new InvalidCastException("oty型" + this.Type + "を" + t + "にキャストできません。");
+            }
+            switch (t)
+            {
+                case otyType.Int32:
+                    return new otyObj(*((Int32*)((int)this.Num)));
+                case otyType.Double:
+                    return new otyObj(*((double*)((int)this.Num)));
+                case otyType.String:
+                    return new otyObj(new String((char*)((int)this.Num)));
+                default:
+                    throw new InvalidCastException("oty型" + this.Type + "を" + t + "にキャストできません。");
+            }
+        }
         public otyObj Func(string name, List<otyObj> arg)
         {
             switch (name)

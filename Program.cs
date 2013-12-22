@@ -25,8 +25,12 @@ namespace otypar
         //state????????????????
         //status!!!!!!!!!!!!!!!!
 
-        static void Main(string[] args)
+        static unsafe void Main(string[] args)
         {
+            fixed (char* ptr = "hogee")
+            {
+                Console.WriteLine(new string(ptr + 1));
+            }
             int[] hoge2 = { 0, 1, 2 };
             var hoge3 = hoge2;
             hoge3[1] = 9;
@@ -181,7 +185,7 @@ var Add(var arg,var value)
   return r;
 }
 int main(){
-print(*(&""A""+20));
+print((string*)(&""ABCD""+2));
 int[1] hoge;
 hoge = Add(hoge,2);
 hoge = Add(hoge,3);
