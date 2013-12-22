@@ -460,6 +460,17 @@ namespace otypar
                             return new otyObj(this.Array.Length);
                         case "ToString":
                             return new otyObj(/*this.Num.ToString()*/this.Obj.ToString());
+                        case "ReAlloc":
+                            var re = new otyObj[(int)arg[0].Num];
+                            for (int i = 0; i < this.Array.Length; i++)
+                            {
+                                re[i] = this.Array[i];
+                            }
+                            for (int i = this.Array.Length; i < arg[0].Num; i++)
+                            {
+                                re[i] = new otyObj();
+                            }
+                            return new otyObj(re);
                         default:
                             throw new MissingMethodException("oty型" + this.Type + "に" + name + "関数の定義がありません。");
                     }

@@ -362,34 +362,60 @@ namespace otypar
                                         result = this.result//result = this.result.GetRange(i + 1, this.result.Count - i - 1)
                                     }, i + 1, this);
                                     forscope.StateRun(forstate1);
-                                    var res = forscope.Eval(otyObj.CreateNullObj(forscope.result, forstate2));//new otyObj(null, forscope.result, forstate2));
-                                    if (res.Num == 1)
+                                    if (forstate2 == forstate3 - 1)
                                     {
-
-                                        var scopereslut=forscope.Run();
+                                        //true
+                                        var scopereslut = forscope.Run();
                                         if (forscope.FuncReturn)
                                         {
                                             this.FuncReturn = true;
                                             return scopereslut;
-                                        } 
+                                        }
                                         i = forscope.index - 1;
-                                        forscope.Eval(otyObj.CreateNullObj(forscope.result, forstate3));//new otyObj(null, forscope.result, forstate3));
+                                        forscope.Eval(otyObj.CreateNullObj(forscope.result, forstate3));
                                     }
                                     else
                                     {
-                                        //最初から実行できない
-                                        forscope = otyRun.Empty;
-                                        forstate1 = -1;
-                                        forstate2 = -1;
-                                        forstate3 = -1;
-                                        i = this.BlockSkip(i + 1);
-                                        state = otyrunstate.None;
+                                        var res = forscope.Eval(otyObj.CreateNullObj(forscope.result, forstate2));//new otyObj(null, forscope.result, forstate2));
+                                        if (res.Num == 1)
+                                        {
+
+                                            var scopereslut = forscope.Run();
+                                            if (forscope.FuncReturn)
+                                            {
+                                                this.FuncReturn = true;
+                                                return scopereslut;
+                                            }
+                                            i = forscope.index - 1;
+                                            forscope.Eval(otyObj.CreateNullObj(forscope.result, forstate3));//new otyObj(null, forscope.result, forstate3));
+                                        }
+                                        else
+                                        {
+                                            //最初から実行できない
+                                            forscope = otyRun.Empty;
+                                            forstate1 = -1;
+                                            forstate2 = -1;
+                                            forstate3 = -1;
+                                            i = this.BlockSkip(i + 1);
+                                            state = otyrunstate.None;
+                                        }
                                     }
                                 }
                                 else
                                 {
-
-                                    if (forscope.Eval(/*new otyObj(null, forscope.result, forstate2)*/otyObj.CreateNullObj(forscope.result,forstate2)).Num == 1)
+                                    if (forstate2 == forstate3 - 1)
+                                    {
+                                        //true
+                                        var scopereslut = forscope.Run();
+                                        if (forscope.FuncReturn)
+                                        {
+                                            this.FuncReturn = true;
+                                            return scopereslut;
+                                        }
+                                        i = forscope.index - 1;
+                                        forscope.Eval(otyObj.CreateNullObj(forscope.result, forstate3));
+                                    }else
+                                    if (forscope.Eval(/*new otyObj(null, forscope.result, forstate2)*/otyObj.CreateNullObj(forscope.result, forstate2)).Num == 1)
                                     {
 
                                         var scopereslut = forscope.Run();
@@ -397,7 +423,7 @@ namespace otypar
                                         {
                                             this.FuncReturn = true;
                                             return scopereslut;
-                                        } 
+                                        }
                                         i = forscope.index - 1;
                                         forscope.Eval(otyObj.CreateNullObj(forscope.result, forstate3));//new otyObj(null, forscope.result, forstate3));
                                     }

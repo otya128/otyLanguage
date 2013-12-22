@@ -174,6 +174,17 @@ aaa[0]=0;
     }
 }";
             prg = @"int main(){
+int[100] mem;
+for(int i=0;;i++)
+{
+print(""FOOOOOOOOOO!"",i);
+}
+for(int i=0;i<mem.Length;i++)
+{
+mem[i]=0;
+}
+mem=mem.ReAlloc(1000);
+print(mem[102]);
 print(""ahoge"".Length);
 print(&(1+1+1)*200000,""end"");
 func kansuumei=printFunc;kansuumei(""Hello"")("","")(""World!!"")(printFunc);}//int gijiteki=0;max(1)(2)(3)(4)(5)(6);print("""",test(2)(40));print(printest.GetType());printest();func ahoge=printest;ahoge();}void printest(){print(""hoge"");}int max(int a){printf(""{0}"",a);return max;}//int max2(b){print(""b"");}}
