@@ -26,6 +26,16 @@ namespace otypar
             this.name = n;
             this.Param = p;
         }
+        public override string ToString()
+        {
+            string res = string.Format("{0} {1}(", type, name);
+            foreach (var i in this.Param)
+            {
+                res += i+" ";
+            }
+            res += ")";
+            return res;
+        }
     }
 
     partial class otyFunc

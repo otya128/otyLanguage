@@ -340,6 +340,7 @@ namespace otypar
                         {
                             //data.index++;
                             data = Eval(new otyObj(j.Obj, r, index), IncrementPrece);//new otyObj(getObj(j), r, index);
+                            index = data.index;
                             switch (data.Type)
                             {
                                 case otyType.Int32:
