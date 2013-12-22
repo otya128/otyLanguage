@@ -174,7 +174,8 @@ aaa[0]=0;
     }
 }";
             prg = @"int main(){
-print(&(1+1+1)*2,""end"");
+print(""ahoge"".Length);
+print(&(1+1+1)*200000,""end"");
 func kansuumei=printFunc;kansuumei(""Hello"")("","")(""World!!"")(printFunc);}//int gijiteki=0;max(1)(2)(3)(4)(5)(6);print("""",test(2)(40));print(printest.GetType());printest();func ahoge=printest;ahoge();}void printest(){print(""hoge"");}int max(int a){printf(""{0}"",a);return max;}//int max2(b){print(""b"");}}
 func printFunc(string arg){
   printf(""{0}"",arg);

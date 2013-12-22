@@ -292,6 +292,12 @@ namespace otypar
                             }
                             else
                             {
+                                if (scoped)
+                                {
+                                    data = data.GetMember(k.Name);
+                                    data.result = r; data.index = index;
+                                }
+                                else
                                 //this.Var[r[index].Name].result = r;
                                 //this.Var[r[index].Name].index = index;
                                 data = new otyObj(getObj(k), r, oo.index);//this.Var[r[index].Name];

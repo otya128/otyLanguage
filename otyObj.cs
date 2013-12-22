@@ -467,7 +467,31 @@ namespace otypar
             //return otyObj.NULL;
             throw new MissingMethodException("oty型"+this.Type+"に"+name+"関数の定義がありません。");
         }
-
+        public otyObj GetMember(string name)
+        {
+           
+            switch (this.Type)
+            {
+                case otyType.String:
+                    switch (name)
+                    {
+                        case "Length":
+                            return new otyObj(this.Str.Length);
+                        default:
+                            throw new MissingMethodException("oty型" + this.Type + "に" + name + "関数の定義がありません。");
+                    }
+                case otyType.Array:
+                    switch (name)
+                    {
+                        case "Length":
+                            return new otyObj(this.Array.Length);
+                        default:
+                            throw new MissingMethodException("oty型" + this.Type + "に" + name + "関数の定義がありません。");
+                    }
+            }
+            //return otyObj.NULL;
+            throw new MissingMethodException("oty型" + this.Type + "に" + name + "関数の定義がありません。");
+        }
         
     }
 }
