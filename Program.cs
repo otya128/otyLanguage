@@ -173,9 +173,22 @@ aaa[0]=0;
     e = d % a;
     }
 }";
-            prg = @"int main(){
+            prg = @"
+var Add(var arg,var value)
+{
+  var r = arg.ReAlloc(arg.Length+1);
+  r[arg.Length] = value;
+  return r;
+}
+int main(){
+print(*(&""A""+20));
+int[1] hoge;
+hoge = Add(hoge,2);
+hoge = Add(hoge,3);
+hoge = Add(hoge,4);
+print(hoge[0],hoge[1],hoge[2]);
 int[100] mem;
-for(int i=0;;i++)
+for(int i=0;0;i++)
 {
 print(""FOOOOOOOOOO!"",i);
 }

@@ -1,0 +1,24 @@
+print("Hell World");
+
+-----
+int main()
+{
+  print("Hell World");
+  return 0;
+}
+
+-----
+int main()
+{
+  printf("Hell World{0}","!!");
+  return 0;
+}
+
+-----
+”z—ñ‚ğŠg’£‚µ‚Ä––”ö‚É—v‘f‚ğ‘}“ü‚·‚éŠÖ”
+var ArrayAdd(var arg,var value)
+{
+  var r = arg.ReAlloc(arg.Length+1);
+  r[arg.Length] = value;
+  return r;
+}

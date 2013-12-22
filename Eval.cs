@@ -376,6 +376,27 @@ namespace otypar
                             }
                         }
                         break;
+                    case otyParnum.multiply:
+                        unsafe
+                        {
+                            //data.index++;
+                            data = Eval(new otyObj(j.Obj, r, index), IncrementPrece);//new otyObj(getObj(j), r, index);
+                            index = data.index;
+                            switch (data.Type)
+                            {
+                                case otyType.Int32:
+                                    int p1 = (int)data.Num;
+                                    int* pp = (int*)p1;
+                                    int* p2 = &p1;    
+                                //int p3 = *p1;
+                                    data = new otyObj(*pp, r, index);
+                                    index++;
+                                    j = r[index];
+                                    // goto start2;
+                                    break;
+                            }
+                        }
+                        break;
                 }
                 switch (j.otyParnum)
                 {
