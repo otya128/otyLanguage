@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace otypar
 {
-    static public class otyOpera
+    static unsafe public class otyOpera
     {
         public static otyObj Bool(bool arg1)
         {
@@ -16,19 +16,25 @@ namespace otypar
         {
             switch (arg1.Type)
             {
-                case otyType.Int32:
+                /*case otyType.Pointer:
+                    return new otyObj((void*)(arg1.Ptr.Address + (int)arg2.Num));
+                */case otyType.Int32:
                     return new otyObj(arg1.Num + arg2.Num);
                 case otyType.String:
                     return new otyObj(arg1.Str + arg2.Str);
+                case otyType.Double:
+                    return new otyObj(arg1.Double + arg2.Double);
             }
-            throw new ArgumentException("oty型'"+arg1.Type+"'とoty型'"+arg2.Type+"'は演算できません。");
+            throw new ArgumentException("oty型'" + arg1.Type + "'とoty型'" + arg2.Type + "'は演算できません。");
         }
         public static otyObj Sub(otyObj arg1, otyObj arg2)
         {
             switch (arg1.Type)
             {
-                case otyType.Int32:
+                /*case otyType.Pointer: return new otyObj((void*)(arg1.Ptr.Address - (int)arg2.Num));
+                */case otyType.Int32:
                     return new otyObj(arg1.Num - arg2.Num);
+                case otyType.Double: return new otyObj(arg1.Double - arg2.Double);
             }
             throw new ArgumentException("oty型'" + arg1.Type + "'とoty型'" + arg2.Type + "'は演算できません。");
         }
@@ -36,8 +42,10 @@ namespace otypar
         {
             switch (arg1.Type)
             {
-                case otyType.Int32:
+                /*case otyType.Pointer: return new otyObj((void*)(arg1.Ptr.Address * (int)arg2.Num));
+                */case otyType.Int32:
                     return new otyObj(arg1.Num * arg2.Num);
+                case otyType.Double: return new otyObj(arg1.Double * arg2.Double);
             }
             throw new ArgumentException("oty型'" + arg1.Type + "'とoty型'" + arg2.Type + "'は演算できません。");
         }
@@ -45,8 +53,10 @@ namespace otypar
         {
             switch (arg1.Type)
             {
-                case otyType.Int32:
+                /*case otyType.Pointer: return new otyObj((void*)(arg1.Ptr.Address / (int)arg2.Num));
+                */case otyType.Int32:
                     return new otyObj(arg1.Num / arg2.Num);
+                case otyType.Double: return new otyObj(arg1.Double / arg2.Double);
             }
             throw new ArgumentException("oty型'" + arg1.Type + "'とoty型'" + arg2.Type + "'は演算できません。");
         }
@@ -54,8 +64,10 @@ namespace otypar
         {
             switch (arg1.Type)
             {
-                case otyType.Int32:
+                /*case otyType.Pointer: return new otyObj((void*)(arg1.Ptr.Address % (int)arg2.Num));
+                */case otyType.Int32:
                     return new otyObj(arg1.Num % arg2.Num);
+                case otyType.Double: return new otyObj(arg1.Double % arg2.Double);
             }
             throw new ArgumentException("oty型'" + arg1.Type + "'とoty型'" + arg2.Type + "'は演算できません。");
         }
@@ -63,7 +75,8 @@ namespace otypar
         {
             switch (arg1.Type)
             {
-                case otyType.Int32:
+                /*case otyType.Pointer: return new otyObj((void*)(arg1.Ptr.Address << (int)arg2.Num));
+                */case otyType.Int32:
                     return new otyObj(arg1.Num << arg2.Num);
             }
             throw new ArgumentException("oty型'" + arg1.Type + "'とoty型'" + arg2.Type + "'は演算できません。");
@@ -72,7 +85,8 @@ namespace otypar
         {
             switch (arg1.Type)
             {
-                case otyType.Int32:
+                /*case otyType.Pointer: return new otyObj((void*)(arg1.Ptr.Address >> (int)arg2.Num));
+                */case otyType.Int32:
                     return new otyObj(arg1.Num >> arg2.Num);
             }
             throw new ArgumentException("oty型'" + arg1.Type + "'とoty型'" + arg2.Type + "'は演算できません。");
@@ -81,8 +95,10 @@ namespace otypar
         {
             switch (arg1.Type)
             {
-                case otyType.Int32:
+                /*case otyType.Pointer:
+                */case otyType.Int32:
                     return Bool(arg1.Num < arg2.Num);
+                case otyType.Double: return Bool(arg1.Double < arg2.Double);
             }
             throw new ArgumentException("oty型'" + arg1.Type + "'とoty型'" + arg2.Type + "'は演算できません。");
         }
@@ -90,8 +106,10 @@ namespace otypar
         {
             switch (arg1.Type)
             {
-                case otyType.Int32:
+                /*case otyType.Pointer:
+                */case otyType.Int32:
                     return Bool(arg1.Num <= arg2.Num);
+                case otyType.Double: return Bool(arg1.Double <= arg2.Double);
             }
             throw new ArgumentException("oty型'" + arg1.Type + "'とoty型'" + arg2.Type + "'は演算できません。");
         }
@@ -99,8 +117,10 @@ namespace otypar
         {
             switch (arg1.Type)
             {
-                case otyType.Int32:
+                /*case otyType.Pointer:
+                */case otyType.Int32:
                     return Bool(arg1.Num > arg2.Num);
+                case otyType.Double: return Bool(arg1.Double > arg2.Double);
             }
             throw new ArgumentException("oty型'" + arg1.Type + "'とoty型'" + arg2.Type + "'は演算できません。");
         }
@@ -108,8 +128,10 @@ namespace otypar
         {
             switch (arg1.Type)
             {
-                case otyType.Int32:
+                /*case otyType.Pointer:
+                */case otyType.Int32:
                     return Bool(arg1.Num >= arg2.Num);
+                case otyType.Double: return Bool(arg1.Double >= arg2.Double);
             }
             throw new ArgumentException("oty型'" + arg1.Type + "'とoty型'" + arg2.Type + "'は演算できません。");
         }
@@ -117,10 +139,13 @@ namespace otypar
         {
             switch (arg1.Type)
             {
-                case otyType.Int32:
+                /*case otyType.Pointer:
+                */case otyType.Int32:
                     return Bool(arg1.Num == arg2.Num);
                 case otyType.String:
                     return Bool(arg1.Str == arg2.Str);
+                case otyType.Double:
+                    return Bool(arg1.Double == arg2.Double);
             }
             return Bool(arg1.Obj == arg2.Obj);
         }
@@ -128,10 +153,12 @@ namespace otypar
         {
             switch (arg1.Type)
             {
-                case otyType.Int32:
+                /*case otyType.Pointer:
+                */case otyType.Int32:
                     return Bool(arg1.Num != arg2.Num);
                 case otyType.String:
                     return Bool(arg1.Str != arg2.Str);
+                case otyType.Double: return Bool(arg1.Double != arg2.Double);
             }
             return Bool(arg1.Obj != arg2.Obj);
         }
@@ -159,7 +186,9 @@ namespace otypar
         {
             switch (arg1.Type)
             {
-                case otyType.Int32:
+                /*case otyType.Pointer:
+                    return new otyObj((void*)(arg1.Ptr.Address & (int)arg2.Num));
+                */case otyType.Int32:
                     return new otyObj(arg1.Num & arg2.Num);
             }
             throw new ArgumentException("oty型'" + arg1.Type + "'とoty型'" + arg2.Type + "'は演算できません。");
@@ -172,6 +201,10 @@ namespace otypar
                     if ((arg1.Num == 0 || arg1.Num == null) && (arg2.Num == 0 || arg2.Num == null))
                         return new otyObj(1);
                     return new otyObj(0);
+                case otyType.Double:
+                    if ((arg1.Double == 0 || arg1.Double == null) && (arg2.Double == 0 || arg2.Double == null))
+                        return new otyObj(1);
+                    return new otyObj(0);
             }
             throw new ArgumentException("oty型'" + arg1.Type + "'とoty型'" + arg2.Type + "'は演算できません。");
         }
@@ -179,7 +212,9 @@ namespace otypar
         {
             switch (arg1.Type)
             {
-                case otyType.Int32:
+                /*case otyType.Pointer:
+                    return new otyObj((void*)(arg1.Ptr.Address ^ (int)arg2.Num));
+                */case otyType.Int32:
                     return new otyObj(arg1.Num ^ arg2.Num);
             }
             throw new ArgumentException("oty型'" + arg1.Type + "'とoty型'" + arg2.Type + "'は演算できません。");
@@ -188,7 +223,9 @@ namespace otypar
         {
             switch (arg1.Type)
             {
-                case otyType.Int32:
+                /*case otyType.Pointer:
+                    return new otyObj((void*)(arg1.Ptr.Address | (int)arg2.Num));
+                */case otyType.Int32:
                     return new otyObj(arg1.Num | arg2.Num);
             }
             throw new ArgumentException("oty型'" + arg1.Type + "'とoty型'" + arg2.Type + "'は演算できません。");
@@ -199,6 +236,10 @@ namespace otypar
             {
                 case otyType.Int32:
                     if ((arg1.Num == 0 || arg1.Num == null) || (arg2.Num == 0 || arg2.Num == null))
+                        return new otyObj(1);
+                    return new otyObj(0);
+                case otyType.Double:
+                    if ((arg1.Double == 0 || arg1.Double == null) || (arg2.Double == 0 || arg2.Double == null))
                         return new otyObj(1);
                     return new otyObj(0);
             }

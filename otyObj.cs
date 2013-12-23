@@ -6,7 +6,33 @@ using System.Threading.Tasks;
 
 namespace otypar
 {
-    public class otyObj
+    public unsafe class otyPtrObj
+    {
+        public otyPtrObj(void* ptr)
+        {
+            
+            this.Pointer = ptr;
+        }
+        public void* Pointer;
+        /// <summary>
+        /// ポインタのアドレスを取得または設定します。
+        /// </summary>
+        public int Address {
+            get
+            {
+                return (int)this.Pointer;
+            }
+            set
+            {
+                this.Pointer = (void*)value;
+            }
+        }
+        public override string ToString()
+        {
+            return this.Address.ToString();
+        }
+    }
+    public unsafe class otyObj
     {
         public bool isNull()
         {
@@ -69,6 +95,13 @@ namespace otypar
             this.result = r;
             this.index = i;
         }
+        public unsafe otyObj(void* obj, List<otyParc> r, int i, otyType Type = otyType.Pointer)
+        {
+            this.Type = Type;
+            this.Ptr = new otyPtrObj(obj);
+            this.result = r;
+            this.index = i;
+        }
         public otyObj(object obj)
         {
             this.Obj = obj;
@@ -89,11 +122,16 @@ namespace otypar
         {
             this.Function = obj;
         }
+        public unsafe otyObj(void* obj)
+        {
+            this.Ptr = new otyPtrObj(obj);
+        }
         public void Add(otyObj arg2)
         {
 
             switch (this.Type)
             {
+                case otyType.Pointer:
                 case otyType.Int32:
                     this.Num += arg2.Num;//new otyObj(arg1.Num + arg2.Num);
                     break;
@@ -110,6 +148,7 @@ namespace otypar
 
             switch (this.Type)
             {
+                case otyType.Pointer:
                 case otyType.Int32:
                     this.Num -= arg2.Num;//new otyObj(arg1.Num + arg2.Num);
                     break;
@@ -142,6 +181,8 @@ namespace otypar
                                 Type = otyType.Array;
                             else if (value.GetType().Name == "otyFuncObj")
                                 Type = otyType.Function;
+                            else if (value.GetType().Name == "otyPtrObj")
+                                Type = otyType.Pointer;
                 obj = value;
             }
         }
@@ -159,6 +200,18 @@ namespace otypar
                 this.Obj = value;
             }
         }
+        public otyPtrObj Ptr
+        {
+            get
+            {
+                return (otyPtrObj)this.Obj;
+            }
+            set
+            {
+                this.Type = otyType.Pointer;
+                this.Obj = value;
+            }
+        }
         public otyFuncObj Function
         {
             get
@@ -171,14 +224,19 @@ namespace otypar
                 this.Obj = value;
             }
         }
-        public int? Num
+        public unsafe int? Num
         {
             get
             {
+                if (this.Type == otyType.Pointer) return this.Ptr.Address;
                 return this.Obj as Int32?;
             }
             set
             {
+                if (this.Type == otyType.Pointer) { 
+                    var ptr = this.Ptr; 
+                    ptr.Address = (int)value; return; 
+                }
                 this.Type = otyType.Int32;
                 this.Obj = value;
             }
@@ -224,6 +282,7 @@ namespace otypar
         {
             switch (this.Type)
             {
+                case otyType.Pointer:
                 case otyType.Int32:
                     this.Num--;
                     break;
@@ -237,6 +296,7 @@ namespace otypar
         {
             switch (this.Type)
             {
+                case otyType.Pointer:
                 case otyType.Int32:
                     if (this.Num < arg2.Num) return new otyObj(1); else return new otyObj(0);
                     break;
@@ -250,6 +310,7 @@ namespace otypar
         {
             switch (this.Type)
             {
+                case otyType.Pointer:
                 case otyType.Int32:
                     if (this.Num > arg2.Num) return new otyObj(1); else return new otyObj(0);
                     break;
@@ -263,6 +324,7 @@ namespace otypar
         {
             switch (this.Type)
             {
+                case otyType.Pointer:
                 case otyType.Int32:
                     if (this.Num <= arg2.Num) return new otyObj(1); else return new otyObj(0);
                     break;
@@ -276,6 +338,7 @@ namespace otypar
         {
             switch (this.Type)
             {
+                case otyType.Pointer:
                 case otyType.Int32:
                     if (this.Num >= arg2.Num) return new otyObj(1); else return new otyObj(0);
                     break;
@@ -289,6 +352,7 @@ namespace otypar
         {
             switch (this.Type)
             {
+                case otyType.Pointer:
                 case otyType.Int32:
                     if (this.Num == arg2.Num) return new otyObj(1); else return new otyObj(0);
                 case otyType.Double:
@@ -305,6 +369,9 @@ namespace otypar
                 case otyType.Int32:
                     this.Num %= arg2.Num;
                     break;
+                case otyType.Pointer:
+                    this.Num %= arg2.Num;
+                    break;
                 case otyType.Double:
                     this.Double %= arg2.Double;
                     break;
@@ -317,8 +384,26 @@ namespace otypar
                 case otyType.Int32:
                     this.Num /= arg2.Num;
                     break;
+                case otyType.Pointer:
+                    this.Num /= arg2.Num;
+                    break;
                 case otyType.Double:
                     this.Double /= arg2.Double;
+                    break;
+            }
+        }
+        public void Multply(otyObj arg2)
+        {
+            switch (this.Type)
+            {
+                case otyType.Int32:
+                    this.Num *= arg2.Num;
+                    break;
+                case otyType.Pointer:
+                    this.Num *= arg2.Num;
+                    break;
+                case otyType.Double:
+                    this.Double *= arg2.Double;
                     break;
             }
         }
@@ -415,7 +500,7 @@ namespace otypar
         public unsafe otyObj PtrCast(string type)
         {
             var t = otyObj.ToType(type);
-            if (this.Type != otyType.Int32)
+            if (this.Type != otyType.Int32 && this.Type != otyType.Pointer)
             {
                 throw new InvalidCastException("oty型" + this.Type + "を" + t + "にキャストできません。");
             }
@@ -522,6 +607,16 @@ namespace otypar
             //return otyObj.NULL;
             throw new MissingMethodException("oty型" + this.Type + "に" + name + "関数の定義がありません。");
         }
-        
+        public otyObj Indexer(int index)
+        {
+            switch (this.Type)
+            {
+                case otyType.Array:
+                    return this.Array[index];
+                case otyType.Pointer:
+                    return new otyObj((void*)(this.Ptr.Address + index));
+            }
+            throw new ArgumentException("[]を"+this.Type+"に適用できません?");
+        }
     }
 }

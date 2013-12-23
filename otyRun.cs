@@ -8,8 +8,9 @@ namespace otypar
 {
     public enum otyType
     {
-        Object,Int32,Double,String,Array,Function,
-    }/*
+        Object, Int32, Double, String, Array, Function, Pointer
+    }
+    /*
     public class otyType
     {
         public const string Int32 = "int";
@@ -451,6 +452,8 @@ namespace otypar
                     case otyrunstate.None:
                         switch (j.otyParnum)
                         {
+                            case otyParnum.semicolon:
+                                break;
                             case otyParnum.debbug_stop:
                                 break;
                             case otyParnum.identifier:
@@ -497,6 +500,10 @@ namespace otypar
                             case otyParnum.blockend:
                                 this.index = i;
                                 return otyObj.Void;
+                            default:
+                                obj = Eval(new otyObj(result[i].Obj, result, i));
+                                i = obj.index;
+                                break;
                         }
 
                         break;

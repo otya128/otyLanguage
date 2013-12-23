@@ -1,24 +1,43 @@
+//main関数なし
 print("Hell World");
 
------
+//main関数有り
 int main()
 {
   print("Hell World");
   return 0;
 }
 
------
+//format指定
 int main()
 {
   printf("Hell World{0}","!!");
   return 0;
 }
 
------
-配列を拡張して末尾に要素を挿入する関数
+//配列を拡張して末尾に要素を挿入する関数
 var ArrayAdd(var arg,var value)
 {
-  var r = arg.ReAlloc(arg.Length+1);
+  var r = arg.ReAlloc(arg.Length + 1);
   r[arg.Length] = value;
   return r;
 }
+
+//ポインタを取得する関数
+//実態はint
+var GetPtr(var arg1)
+{
+  return &arg1;
+}
+
+//関数を返す関数
+var print = printfunc;//組み込み関数を上書き
+print("Hello")(",")("World!!");
+var printfunc(var arg1)
+{
+  printf("{0}", arg1);
+  return printfunc;
+}
+
+//ポインタを取得して指定した型へキャストする
+print((string*)&"ABCDEFG" + 2);//BCDEFG

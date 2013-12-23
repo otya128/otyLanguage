@@ -98,6 +98,13 @@ namespace otypar
                         return new otyObj(Math.Tanh((double)oo[0].Double));
                     case "truncate":
                         return new otyObj(Math.Truncate((double)oo[0].Double));
+                    case "malloc":
+                        unsafe
+                        {
+                            var ptr = new byte[(int)oo[0].Num];
+                            fixed (byte* ptr2 = ptr)
+                                return new otyObj(ptr2);
+                        }
                     default:
                         var scope = new otyRun(new otypar
                         {

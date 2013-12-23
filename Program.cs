@@ -31,14 +31,17 @@ namespace otypar
             {
                 Console.WriteLine(new string(ptr + 1));
             }
+            var age = new byte*[10];
+            age[0] = (byte*)22222220;
+            Console.WriteLine((int)age[0]);
             int[] hoge2 = { 0, 1, 2 };
             var hoge3 = hoge2;
             hoge3[1] = 9;
             Console.WriteLine(hoge2[1]);
             Console.WriteLine(hoge3[1]);
             object hoge = new 麿();
-            hoge = (引きニートになってふともものきれいな女の子とイチャイチャして幸せに暮らせるようになりたいけどなれない)hoge;
-            new 引きニートになってふともものきれいな女の子とイチャイチャして幸せに暮らせるようになりたいけどなれない(new 引きニートになってふともものきれいな女の子とイチャイチャして幸せに暮らせるようになりたいけどなれない());
+                                                                                                                                             hoge = (引きニートになってふともものきれいな女の子とイチャイチャして幸せに暮らせるようになりたいけどなれない)hoge;
+                                                                                                                                            new 引きニートになってふともものきれいな女の子とイチャイチャして幸せに暮らせるようになりたいけどなれない(new 引きニートになってふともものきれいな女の子とイチャイチャして幸せに暮らせるようになりたいけどなれない());
             //for(if(true);;);
             //for(Console.WriteLine("hello" + "world" + 1+("helllo"));true;Console.WriteLine("hello" + "world" + 1+("helllo")));
             for (int i = 0; i < 10; i++) Console.WriteLine("hello" + "world" + 1 + ("helllo{0}"),i%2);
@@ -203,7 +206,7 @@ mem[i]=0;
 mem=mem.ReAlloc(1000);
 print(mem[102]);
 print(""ahoge"".Length);
-print(&(1+1+1)*200000,""end"");
+print(&(mem[1])*2,""end"",&(mem[1])*20);
 func kansuumei=printFunc;kansuumei(""Hello"")("","")(""World!!"")(printFunc);}//int gijiteki=0;max(1)(2)(3)(4)(5)(6);print("""",test(2)(40));print(printest.GetType());printest();func ahoge=printest;ahoge();}void printest(){print(""hoge"");}int max(int a){printf(""{0}"",a);return max;}//int max2(b){print(""b"");}}
 func printFunc(string arg){
   printf(""{0}"",arg);
@@ -216,6 +219,14 @@ int test(int a){
   }
   return test2;
 }
+";
+            prg =
+@"var ptr = malloc(10);
+//ptr[0]=65;
+ptr[0]=66;
+*(&ptr+2)=70;
+*(&ptr+2)+=1;//(ptr[4]-2)=67;
+print((string*)ptr);
 ";
             op.Parse(prg); int j=1;
             // Console.WriteLine(1 + j = 1);
