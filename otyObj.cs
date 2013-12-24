@@ -102,6 +102,13 @@ namespace otypar
             this.result = r;
             this.index = i;
         }
+        public otyObj(char obj, List<otyParc> r, int i, otyType Type = otyType.Array)
+        {
+            this.Type = Type;
+            this.Char = obj;
+            this.result = r;
+            this.index = i;
+        }
         public otyObj(object obj)
         {
             this.Obj = obj;
@@ -125,6 +132,10 @@ namespace otypar
         public unsafe otyObj(void* obj)
         {
             this.Ptr = new otyPtrObj(obj);
+        }
+        public otyObj(char obj)
+        {
+            this.Char = obj;
         }
         public void Add(otyObj arg2)
         {
@@ -209,6 +220,18 @@ namespace otypar
             set
             {
                 this.Type = otyType.Pointer;
+                this.Obj = value;
+            }
+        }
+        public char Char
+        {
+            get
+            {
+                return (char)this.Obj;
+            }
+            set
+            {
+                this.Type = otyType.Char;
                 this.Obj = value;
             }
         }

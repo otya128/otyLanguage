@@ -221,12 +221,18 @@ int test(int a){
 }
 ";
             prg =
-@"var ptr = malloc(10);
-//ptr[0]=65;
+@"var ptr = malloc(100);
+////ptr[0]=65;
 ptr[0]=66;
-*(&ptr+2)=70;
-*(&ptr+2)+=1;//(ptr[4]-2)=67;
-print((string*)ptr);
+*(&ptr)=""abcdefg"";
+*(&ptr+2)=""eee"";
+//*(&ptr+2)+=1;//(ptr[4]-2)=67;
+int i=0;
+i+=2;
+print((string*)ptr,i);
+print('t');
+var str=""hoge"";var length=str.Length;print(&str+length*2-1);
+var str=""簡単に言うと数学で言う「!」のことか"";for(int ptr=&str+str.Length*2-1;ptr>=&str;ptr-=2){print((string*)ptr);}
 ";
             op.Parse(prg); int j=1;
             // Console.WriteLine(1 + j = 1);

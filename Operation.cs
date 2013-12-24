@@ -245,5 +245,30 @@ namespace otypar
             }
             throw new ArgumentException("oty型'" + arg1.Type + "'とoty型'" + arg2.Type + "'は演算できません。");
         }
+        public static void PtrSetObj(otyObj arg1, otyObj arg2)
+        {
+            var ptr = arg1.Ptr.Pointer;
+            //var hoge = *ptr;
+            switch (arg2.Type)
+            {
+                case otyType.Int32:
+                    *((int*)ptr) = (int)arg2.Num;
+                    break;
+                case otyType.Double:
+                    *((Double*)ptr) = (Double)arg2.Double;
+                    break;
+                case otyType.Char:
+                    *((char*)ptr) = (char)arg2.Char;
+                    break;
+                case otyType.String:
+                    for (int i = 0; i < arg2.Str.Length; i++)
+                    {
+                        var c = arg2.Str[i];
+                        *((char*)ptr + (i/**sizeof(char)*/)) = c;
+                    }
+                    *((char*)ptr + arg2.Str.Length/* * sizeof(char)*/) = '\0';
+                    break;
+            }
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace otypar
 {
     public enum otyType
     {
-        Object, Int32, Double, String, Array, Function, Pointer
+        Object, Int32, Double, String, Array, Function, Pointer, Char
     }
     /*
     public class otyType

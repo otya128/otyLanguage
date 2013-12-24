@@ -56,6 +56,7 @@ namespace otypar
         andequal,//&=
         orequal,//|=
         xorequal,//^=
+        chr,//single str
     }
     public class otyParc
     {
@@ -70,6 +71,12 @@ namespace otypar
                 this.Num = int.Parse(name);
             if (o == otyParnum.str)
                 this.Str = name;
+        }
+        public otyParc(otyParnum o, char name)
+        {
+            this.otyParnum = o;
+            this.Chr = name; this.Name = name.ToString();
+            this.otyParnum = otyParnum.chr;
         }
         public otyParnum otyParnum;
         public string Name;
@@ -95,6 +102,17 @@ namespace otypar
                 this.Obj = value;
             }
         }
+        public char? Chr
+        {
+            get
+            {
+                return this.Obj as char?;
+            }
+            set
+            {
+                this.Obj = value;
+            }
+        }
         public Double? Double
         {
             get
@@ -113,7 +131,8 @@ namespace otypar
         private enum otyparstate
         {
             None, IdenRead, NumRead, StrRead, DoubleRead,
-            EscapeRead,LineCommentRead,CommentRead,
+            EscapeRead, LineCommentRead, CommentRead,
+            SingleStrRead,
         }
         public List<otyParc> result = new List<otyParc>();
         
@@ -195,6 +214,23 @@ namespace otypar
                             iden += j;
                         }
                         break;
+                    case otyparstate.SingleStrRead:
+                        if (j == '\'')
+                        {
+                            if (iden.Length != 1)
+                            {
+                                throw new FormatException("charリテラルは1文字である必要があります。");
+                            }
+                            result.Add(new otyParc(otyParnum.str, iden[0]));
+                            iden = "";
+                            state = otyparstate.None;
+                        }
+                        else
+                        {
+                            //if (j == '\\') { state = otyparstate.EscapeRead; break; }
+                            iden += j;
+                        }
+                        break;
                     case otyparstate.EscapeRead:
                         switch (j)
                         {
@@ -263,6 +299,9 @@ namespace otypar
                                         break;
                                     case '"':
                                         state = otyparstate.StrRead;
+                                        break;
+                                    case '\'':
+                                        state = otyparstate.SingleStrRead;
                                         break;
                                     case '+':
                                         if (i + 1 < p.Length)
