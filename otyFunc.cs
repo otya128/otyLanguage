@@ -124,6 +124,10 @@ namespace otypar
             }
             catch (KeyNotFoundException)
             {
+                throw new ArgumentException("関数が存在しません。" + name + "関数");
+            }
+            catch (ArgumentOutOfRangeException)
+            {
                 throw new ArgumentException("引数が足りません。" + name + "関数");
             }
             catch (InvalidOperationException)

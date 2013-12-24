@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//github mail change test
+
 namespace otypar
 {
     public partial class otyRun
@@ -168,12 +168,11 @@ namespace otypar
                             }
                             if (iii + 1 == ii)
                             {//引数なし
-                                data.index = ii;
+                                data.index = ii; index = ii;
                             }
                             {
                                 result.index = data.index;
                                 result.result = data.result;
-
                             } data = result;// return data;
 
                             if (index + 2 <= r.Count) ;//{ data.index++; index++; }
