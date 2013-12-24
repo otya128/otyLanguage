@@ -378,7 +378,7 @@ namespace otypar
                                     else
                                     {
                                         var res = forscope.Eval(otyObj.CreateNullObj(forscope.result, forstate2));//new otyObj(null, forscope.result, forstate2));
-                                        if (res.Num == 1)
+                                        if ((int)res.Num != 0)
                                         {
 
                                             var scopereslut = forscope.Run();
@@ -416,7 +416,7 @@ namespace otypar
                                         i = forscope.index - 1;
                                         forscope.Eval(otyObj.CreateNullObj(forscope.result, forstate3));
                                     }else
-                                    if (forscope.Eval(/*new otyObj(null, forscope.result, forstate2)*/otyObj.CreateNullObj(forscope.result, forstate2)).Num == 1)
+                                    if ((int)forscope.Eval(/*new otyObj(null, forscope.result, forstate2)*/otyObj.CreateNullObj(forscope.result, forstate2)).Num != 0)
                                     {
 
                                         var scopereslut = forscope.Run();
@@ -469,6 +469,9 @@ namespace otypar
                                         break;
                                     case "return":
                                         state = otyrunstate.Return;
+                                        break;
+                                    case "continue":
+                                        state = otyrunstate.Return;//未実装
                                         break;
                                     default:
                                         state = otyrunstate.IdenRun;

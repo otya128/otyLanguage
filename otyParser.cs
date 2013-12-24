@@ -352,6 +352,16 @@ namespace otypar
                                             }
                                         result.Add(new otyParc(otyParnum.equal, "="));
                                         break;
+                                    case '!':
+                                        if (i + 1 < p.Length)
+                                            if (p[i + 1] == '=')
+                                            {
+                                                result.Add(new otyParc(otyParnum.notequal, "!="));
+                                                i++;
+                                                break;
+                                            }
+                                        result.Add(new otyParc(otyParnum.notnot, "!"));
+                                        break;
                                     case ';':
                                         result.Add(new otyParc(otyParnum.semicolon, ";"));
                                         break;

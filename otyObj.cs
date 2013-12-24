@@ -194,6 +194,8 @@ namespace otypar
                                 Type = otyType.Function;
                             else if (value.GetType().Name == "otyPtrObj")
                                 Type = otyType.Pointer;
+                            else if (value.GetType().Name == "Char")
+                                Type = otyType.Char;
                 obj = value;
             }
         }
@@ -378,6 +380,8 @@ namespace otypar
                 case otyType.Pointer:
                 case otyType.Int32:
                     if (this.Num == arg2.Num) return new otyObj(1); else return new otyObj(0);
+                case otyType.Char:
+                    if (this.Char == arg2.Char) return new otyObj(1); else return new otyObj(0);
                 case otyType.Double:
                     if (this.Double == arg2.Double) return new otyObj(1); else return new otyObj(0);
                 case otyType.String:
@@ -468,6 +472,9 @@ namespace otypar
                 case "Int32":
                 case "int":
                     return otyType.Int32;
+                case "Char":
+                case "char":
+                    return otyType.Char;
                 case "String":
                 case "string":
                     return otyType.String;
@@ -483,10 +490,9 @@ namespace otypar
             switch (t)
             {
                 case otyType.Int32:
-                    if (this.Type == otyType.Double)
+                    if (this.Type == otyType.Double || this.Type == otyType.Int32 || this.Type == otyType.Char)
                     {
-                        this.Num = (Int32)this.Double;
-                        
+                        this.Num = Convert.ToInt32(this.Obj);
                     }
                     else
                     {
@@ -497,10 +503,24 @@ namespace otypar
                         throw new InvalidCastException("oty型" + this.Type + "を" + t + "にキャストできません。");
                     }
                     break;
-                case otyType.Double:
-                    if (this.Type == otyType.Int32)
+                case otyType.Char:
+                    if (this.Type == otyType.Double || this.Type == otyType.Int32 || this.Type == otyType.Char)
                     {
-                        this.Double = (Double)this.Num;
+                        this.Char = Convert.ToChar(this.Obj);
+                    }
+                    else
+                    {
+                        if (this.Type == otyType.Object)
+                        {
+                            this.Char = (Char)this.Obj;
+                        }
+                        throw new InvalidCastException("oty型" + this.Type + "を" + t + "にキャストできません。");
+                    }
+                    break;
+                case otyType.Double:
+                    if (this.Type == otyType.Double || this.Type == otyType.Int32 || this.Type == otyType.Char)
+                    {
+                        this.Double = Convert.ToDouble(this.Obj);
                     }
                     else
                     {
@@ -575,6 +595,24 @@ namespace otypar
                             }
 
                             throw new ArgumentException("引数が足りません");
+                        case "IndexOf":
+                            if (arg.Count > 0)
+                            {
+                                return new otyObj(this.Str.IndexOf(arg[0].Str));
+                            }
+
+                            throw new ArgumentException("引数が足りません");
+                        case "Substring":
+                            if (arg.Count == 1)
+                            {
+                                return new otyObj(this.Str.Substring((int)arg[0].Num));
+                            }
+                            if (arg.Count > 1)
+                            {
+                                return new otyObj(this.Str.Substring((int)arg[0].Num, (int)arg[1].Num));
+                            }
+
+                            throw new ArgumentException("引数が足りません");
                         case "ToString":
                             return new otyObj(/*this.Num.ToString()*/this.Obj.ToString());
                         default:
@@ -636,6 +674,8 @@ namespace otypar
             {
                 case otyType.Array:
                     return this.Array[index];
+                case otyType.String:
+                    return new otyObj(this.Str[index]);
                 case otyType.Pointer:
                     return new otyObj((void*)(this.Ptr.Address + index));
             }

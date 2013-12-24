@@ -238,9 +238,60 @@ var str=""簡単に言うと数学で言う「!」のことか"";for(int ptr=&st
             Console.Title = "";
             Console.WriteLine("otyScript");
         main:
-            prg = @"var ptr=malloc(100);
-*(&ptr)=""aa"";print((string*)ptr);print();print(print().GetType());";//prg = Console.ReadLine();
-            op.Parse(prg); int j=1;
+            prg = @"var BF=""
+>+++++++++[<++++++++>-]<.>+++++++[<++++>-]<+.+++++++..+++.[-]>++++++++[<++
+++>-]<.>+++++++++++[<+++++>-]<.>++++++++[<+++>-]<.+++.------.--------.[-]>
+++++++++[<++++>-]<+.[-]++++++++++.
+"";int[1000] memory;
+for(int i=0;i<memory.Length;i++)
+{
+  memory[i]=0;
+}
+int pointer = 0;
+bool isbreak = 0;
+for(int i=0;i<BF.Length;i++)
+{
+  var B = BF[i];
+  if(isbreak)if(B==']')isbreak=0;
+  if(B=='[')
+  {
+    if(memory[pointer]==0) {isbreak++;}
+  }
+  if(B==']') 
+  {
+    if(memory[pointer]!=0)
+    {
+      for(nit j=i;j>0;j--)
+      {
+        if(BF[j]=='[')
+{i=j-1;j=-999;}
+      }
+    }
+  }
+  if(B=='<')
+  {
+    pointer--;
+  }
+  if(B=='>')
+  {
+    pointer++;
+  }
+  if(B=='+')
+  {
+    memory[pointer]++;
+  }
+  if(B=='-')
+  {
+    memory[pointer]--;
+  }
+  if(B=='.')
+  {
+    printf(""{0}"",(char)memory[pointer]);
+  }
+}";
+            prg = "var BF=\">+++++++++[<++++++++>-]<.>+++++++[<++++>-]<+.+++++++..+++.[-]>++++++++[<++++>-]<.>+++++++++++[<+++++>-]<.>++++++++[<+++>-]<.+++.------.--------.[-]>++++++++[<++++>-]<+.[-]++++++++++.\";int[1000]m;for(int i=0;i<m.Length;i++){m[i]=0;}int p=0;bool f=0;for(int i=0;i<BF.Length;i++){var B=BF[i];if(f)if(B==']'){f=0;}if(B=='['){if(m[p]==0){f++;}}if(B==']'){if(m[p]!=0){for(nit j=i;j>0;j--){if(BF[j]=='['){i=j-1;j=-999;}}}}if(B=='<')p--;if(B=='>')p++;if(B=='+')m[p]++;if(B=='-')m[p]--;if(B=='.')printf(\"{0}\",(char)m[p]);}";//prg = Console.ReadLine();
+            prg = "var BF=\">+++++++++[<++++++++>-]<.>+++++++[<++++>-]<+.+++++++..+++.[-]>++++++++[<++++>-]<.>+++++++++++[<+++++>-]<.>++++++++[<+++>-]<.+++.------.--------.[-]>++++++++[<++++>-]<+.[-]++++++++++.\";int[1000]m;for(int i=0;i<m.Length;i++){m[i]=0;}int p=0;bool f=0;for(int i=0;i<BF.Length;i++){var B=BF[i];if(f)if(B==']')f=0;if(B=='[')if(m[p]==0)f++;if(B==']'){if(m[p]!=0){for(nit j=i;j>0;j--){if(BF[j]=='['){i=j-1;j=-999;}}}}if(B=='<')p--;if(B=='>')p++;if(B=='+')m[p]++;if(B=='-')m[p]--;if(B=='.')printf(\"{0}\",(char)m[p]);}"; op.Parse(prg); int j = 1;
+            prg = "v S=\">+++++++++[<++++++++>-]<.>+++++++[<++++>-]<+.+++++++..+++.[-]>++++++++[<++++>-]<.>+++++++++++[<+++++>-]<.>++++++++[<+++>-]<.+++.------.--------.[-]>++++++++[<++++>-]<+.[-]++++++++++.\";v[999]m;for(v i=0;i<m.Length;i++){m[i]=0;}v p=0;v f=0;for(int i=0;i<S.Length;i++){var B=S[i];if(f)if(B==']')f=0;if(B=='[')if(m[p]==0)f++;if(B==']'){if(m[p]!=0){for(v j=i;j>0;j--){if(S[j]=='['){i=j-1;j=-1;}}}}if(B=='<')p--;if(B=='>')p++;if(B=='+')m[p]++;if(B=='-')m[p]--;if(B=='.')printf(\"{0}\",(char)m[p]);}";
             // Console.WriteLine(1 + j = 1);
             Console.WriteLine(prg);
             foreach (var i in op.result)

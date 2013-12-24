@@ -183,6 +183,8 @@ namespace otypar
                 /*case otyType.Pointer:
                 */case otyType.Int32:
                     return Bool(arg1.Num != arg2.Num);
+                  case otyType.Char:
+                    return Bool(arg1.Char != arg2.Char);
                 case otyType.String:
                     return Bool(arg1.Str != arg2.Str);
                 case otyType.Double: return Bool(arg1.Double != arg2.Double);

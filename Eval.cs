@@ -86,7 +86,7 @@ namespace otypar
             var r = oo.result;
             var data = oo;
             var k = r[index];
-            bool func = false;
+            bool func = false, setPointerAddress = true;
             if (index + 1 <= r.Count)
             {
             start:
@@ -170,11 +170,9 @@ namespace otypar
                             {//引数なし
                                 data.index = ii; index = ii;
                             }
-                            {
-                                result.index = data.index;
-                                result.result = data.result;
-                            } data = result;// return data;
-
+                            result.index = data.index;
+                            result.result = data.result;
+                            data = result;// return data;
                             if (index + 2 <= r.Count) ;//{ data.index++; index++; }
                             else
                             {
@@ -298,7 +296,7 @@ namespace otypar
                                     data = new otyObj(data.Ptr, r, index);
                                     break;
                                 default:
-                                    throw new ArgumentException("*演算子をてきようできませｎ" + data.Type);
+                                    throw new ArgumentException("*演算子を適用できません。" + data.Type);
                             }
                         }
                         break;
@@ -426,6 +424,15 @@ namespace otypar
                         var obj = Eval(new otyObj(data.result[index].Obj, data.result, index), EqualEqualPrece);
                         index = obj.index;
                         data = data.Equal(obj); data.result = r;
+                        data.index = obj.index;
+                        index++; j = r[index]; if (Operator(j.otyParnum) >= EqualEqualPrece) { index--; opera = 17; k = r[index]; goto start; }
+                        break;
+                    case otyParnum.notequal:
+                        if (opera < EqualEqualPrece) break;
+                        index++;
+                        obj = Eval(new otyObj(data.result[index].Obj, data.result, index), EqualEqualPrece);
+                        index = obj.index;
+                        data = otyOpera.NotEqual(data,obj); data.result = r;
                         data.index = obj.index;
                         index++; j = r[index]; if (Operator(j.otyParnum) >= EqualEqualPrece) { index--; opera = 17; k = r[index]; goto start; }
                         break;

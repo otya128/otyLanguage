@@ -25,6 +25,7 @@ var ArrayAdd(var arg,var value)
 
 //ポインタを取得する関数
 //実態はint
+//Pointer型に
 var GetPtr(var arg1)
 {
   return &arg1;
@@ -41,3 +42,11 @@ var printfunc(var arg1)
 
 //ポインタを取得して指定した型へキャストする
 print((string*)&"ABCDEFG" + 2);//BCDEFG
+
+//配列
+var UnsafeArray(var length)
+{
+  return malloc(length);
+}
+//Branfuck
+v S="+++++++++[>++++++++>+++++++++++>+++++<<<-]>.>++.+++++++..+++.>-.------------.<++++++++.--------.+++.------.--------.>+.";v[999]m;for(v i=0;i<m.Length;i++){m[i]=0;}v p=0;v f=0;for(int i=0;i<S.Length;i++){var B=S[i];if(f)if(B==']')f=0;if(B=='[')if(m[p]==0)f++;if(B==']'){if(m[p]!=0){for(v j=i;j>0;j--){if(S[j]=='['){i=j-1;j=-1;}}}}if(B=='<')p--;if(B=='>')p++;if(B=='+')m[p]++;if(B=='-')m[p]--;if(B=='.')printf("{0}",(char)m[p]);}
