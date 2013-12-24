@@ -92,25 +92,231 @@ namespace otypar
             {
             start:
 
-                switch (k.otyParnum)
-                {
-                    case otyParnum.minus:
-                        if (opera < PointerPrece) break;
-                        data = Eval(new otyObj(r[index + 1].Obj, r, index + 1), PointerPrece);//new otyObj(getObj(j), r, index);
-                        index = data.index;
-                        data = otyOpera.UnaryMinus(data);
-                        data.index = index;
-                        data.result = r;
+switch(k.otyParnum){
+                    case otyParnum.leftparent:
+                        bool test = false;
+                        if (data.result[index - 1].otyParnum == otyParnum.identifier || func)
+                        {
+                            otyObj df = otyObj.NULL;//  if (scoped) 
+                            df = data;List<otyObj> param = new List<otyObj>(); //index++;
+                            int parent = 0;
+                            int ii = index, iii = 0;//void関数ようにindexを保持
+                            while (true)
+                            {
+                                var jj = data.result[ii];
+                                if (jj.otyParnum == otyParnum.leftparent)
+                                {
+                                    parent++;
+                                }
+                                if (jj.otyParnum == otyParnum.rightparent)
+                                {
+
+                                    parent--;
+                                    if (parent == 0)
+                                        break;
+                                }
+                                ii++;
+                            }
+                            if (index + 1 == ii)
+                            {//引数なし
+                                iii = index;
+                                data.index = oo.index;
+                            }
+                            else
+                            {
+                                ii++;
+                                //関数!!
+                                while (true)
+                                {
+                                    index++;
+                                    if (index >= ii - 1)
+                                    {
+                                        index = ii - 1;//+1;
+                                        break;
+                                        if (r[index].otyParnum == otyParnum.rightparent) { index++; break; } if (r[index + 1].otyParnum == otyParnum.rightparent) { index++; break; }
+                                        index++;
+                                    }
+                                    if (r[index].otyParnum == otyParnum.comma) continue;
+                                    if (r[index].otyParnum == otyParnum.rightparent) continue;
+                                    /*if (r[index].otyParnum == otyParnum.rightparent)
+                                    {
+                                        index = ii + 1;
+                                        break;
+                                    }*/
+                                    //{
+                                    //    continue;//
+                                    //    //index++;
+                                    //    //break;
+                                    //}
+                                    otyObj obj;
+                                    obj = Eval(new otyObj(/*getObj*/(data.result[index].Obj), data.result, index));
+                                    index = obj.index;
+                                    //if (!obj.isNull())
+                                    {
+                                        data = new otyObj(obj.Obj, data.result, index);
+                                        param.Add(data);
+                                    }
+                                    //if (r[index].otyParnum == otyParnum.rightparent) { index++; break; }
+                                    //if (r[index + 1].otyParnum == otyParnum.rightparent) {  index++; break; }
+                                    //index++;
+                                    //if (r[index].otyParnum == otyParnum.rightparent && r[index + 1].otyParnum != otyParnum.comma) { break; }
+                                    //index++;
+                                    /*if (index + 1 <= r.Count)
+                                    {
+                                        if (r[index + 1].otyParnum == otyParnum.comma || r[index].otyParnum == otyParnum.comma)
+                                            index++;
+                                        else if (r[index].otyParnum == otyParnum.rightparent) break; 
+                                    }
+                                    else
+                                    {
+                                        if (r[index].otyParnum == otyParnum.comma)
+                                            index++;
+                                        else if (r[index].otyParnum == otyParnum.rightparent) break;
+                                    } */
+                                }
+                            }
+                            otyObj result;
+                            if (!scoped)
+                            {
+                                
+                                if (this.Var.ContainsKey(oo.result[oo.index].Name) || df.Type == otyType.Function)
+                                {
+                                    otyObj funcobj;
+                                    if (df.Type == otyType.Function)
+                                        funcobj = df;
+                                    else
+                                        funcobj = this.Var[oo.result[oo.index].Name];
+                                    var scope = new otyRun(new otypar
+                                    {
+                                        result = this.result//result = this.result.GetRange(i + 1, this.result.Count - i - 1)
+                                    }, funcobj.Function.index + 1, this);
+                                    int jk = 0;
+                                    foreach (var ik in param)
+                                    {
+                                        scope.Variable.Add(funcobj.Function.Param[jk], ik);
+                                        jk++;
+                                    }
+                                    scope.FuncFlg = true;
+                                    result = scope.Run();
+                                }
+                                else
+                                    result = this.DefFunc.RunFunc(oo.result[oo.index].Name, param, this);//result = this.DefFunc.RunFunc(oo.result[oo.index/*-1*/].Name, param,this);
+                            }
+                            else
+                            {
+                                //index++;
+                                result = df.Func(oo.result[oo.index/*-1*/].Name, param);
+                                //index++;
+                                //data.index++;
+                            }/*if (!result.isNull())
+                            {
+                                result.index = data.index;
+                                result.result = data.result;
+                                data = result;
+                            }*/
+                            // return data;
+                            //if (!result.isNull())
+                            if (iii + 1 == ii)
+                            {//引数なし
+                                data.index = ii;
+                            }
+                            {
+                                result.index = data.index;
+                                result.result = data.result;
+
+                            } data = result;// return data;
+
+                            if (index + 2 <= r.Count) ;//{ data.index++; index++; }
+                            else
+                            {
+                                return data;
+                            }
+                        }
+                        else
+                        {
+                            if (index + 2 <= r.Count)
+                            {
+                                if (r[index + 1].otyParnum == otyParnum.identifier)
+                                {
+                                    if (r[index + 2].otyParnum == otyParnum.rightparent)
+                                    {
+                                        string type = r[index + 1].Name;
+                                        index += 3;
+                                        var obj = Eval(new otyObj(/*getObj*/(data.result[index].Obj), data.result, index));
+                                        index = obj.index;
+                                        data = new otyObj(obj.Obj, data.result, index);
+                                        data.Cast(type);
+                                        break;
+                                    }
+                                    else if (r[index + 2].otyParnum == otyParnum.multiply)
+                                    {
+                                        if (index + 3 <= r.Count)
+                                        {
+                                            if (r[index + 3].otyParnum == otyParnum.rightparent)
+                                            {
+                                                string type = r[index + 1].Name;
+                                                index += 4;
+                                                var obj = Eval(new otyObj(/*getObj*/(data.result[index].Obj), data.result, index));
+                                                index = obj.index;
+                                                data = new otyObj(obj.Obj, data.result, index);
+                                                data = data.PtrCast(type); data.result = r; data.index = index;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            var iii = this.ParentSkip(index, -1) + 1;
+                            while (true)//r[index + 1].otyParnum != otyParnum.rightparent)
+                            {
+                                index++;
+                                if (index >= iii - 2)
+                                {
+                                    index = iii - 2;//多分これで+1;
+                                    break;
+                                }
+                                var obj = Eval(new otyObj(/*getObj*/(data.result[index].Obj), data.result, index));
+                                index = obj.index;
+                                data = new otyObj(obj.Obj, data.result, index);
+                            }//if (r[index + 1].otyParnum != otyParnum.rightparent) goto case otyParnum.leftparent;
+                            data.index++;
+                            index++;
+                            if (index + 1 <= r.Count)
+                            {//  return data;sd
+                            }
+                        }
                         break;
-                    case otyParnum.plus:
-                        if (opera < PointerPrece) break;
-                        data = Eval(new otyObj(r[index + 1].Obj, r, index + 1), PointerPrece);//new otyObj(getObj(j), r, index);
-                        index = data.index;
-                        data = otyOpera.UnaryPlus(data);
-                        data.index = index;
-                        data.result = r;
+                    case otyParnum.identifier:
+                        if (index + 1 <= r.Count)
+                            if (r[index + 1].otyParnum == otyParnum.leftparent)
+                            {
+                                //data.index++;
+                                test = true;
+                                index++;
+                                goto case otyParnum.leftparent;
+                            }
+                            else
+                            {
+                                if (scoped)
+                                {
+                                    data = data.GetMember(k.Name);
+                                    data.result = r; data.index = index;
+                                }
+                                else
+                                    //this.Var[r[index].Name].result = r;
+                                    //this.Var[r[index].Name].index = index;
+                                    data = new otyObj(getObj(k), r, oo.index);//this.Var[r[index].Name];
+                            }
+                        /*else if (index + 2 <= r.Count)
+                            if (r[index + 1].otyParnum == otyParnum.plus && r[index + 1].otyParnum == otyParnum.plus)
+                            {
+                                //data.index++;
+                                test = true;
+                                index++;
+                                goto case otyParnum.leftparent;
+                            }*/
                         break;
-                    case otyParnum.and:
+                case otyParnum.and:
                         if (opera < PointerPrece) break;
                         unsafe
                         {
@@ -185,267 +391,26 @@ namespace otypar
                                     throw new ArgumentException("*演算子をてきようできませｎ" + data.Type);
                             }
                         }
+                        break;}
+            switch (k.otyParnum){
+                    case otyParnum.minus:
+                        if (opera < PointerPrece) break;
+                        data = Eval(new otyObj(r[index + 1].Obj, r, index + 1), PointerPrece);//new otyObj(getObj(j), r, index);
+                        index = data.index;
+                        data = otyOpera.UnaryMinus(data);
+                        data.index = index;
+                        data.result = r;
                         break;
-                    case otyParnum.leftparent:
-                        bool test = false;
-                        if (data.result[index - 1].otyParnum == otyParnum.identifier || func)
-                        {
-
-                            otyObj df = otyObj.NULL;
-                            //  if (scoped) 
-                            df = data;
-                            List<otyObj> param = new List<otyObj>(); //index++;
-                            int parent = 0;
-                            int ii = index;
-                            while (true)
-                            {
-                                var jj = data.result[ii];
-                                if (jj.otyParnum == otyParnum.leftparent)
-                                {
-                                    parent++;
-                                }
-                                if (jj.otyParnum == otyParnum.rightparent)
-                                {
-
-                                    parent--;
-                                    if (parent == 0)
-                                        break;
-                                }
-                                ii++;
-                            }
-                            if (index + 1 == ii)
-                            {//引数なし
-                                data.index = oo.index;
-                            }
-                            else
-                            {
-                                ii++;
-                                //関数!!
-                                while (true)
-                                {
-                                    index++;
-
-                                    if (index >= ii - 1)
-                                    {
-                                        index = ii - 1;//+1;
-                                        break;
-                                        if (r[index].otyParnum == otyParnum.rightparent) { index++; break; } if (r[index + 1].otyParnum == otyParnum.rightparent) { index++; break; }
-                                        index++;
-                                        //
-                                    }
-                                    if (r[index].otyParnum == otyParnum.comma)
-                                    {
-                                        continue;
-                                    }
-                                    if (r[index].otyParnum == otyParnum.rightparent)
-                                    {
-                                        continue;
-                                    }
-                                    /*if (r[index].otyParnum == otyParnum.rightparent)
-                                    {
-                                        index = ii + 1;
-                                        break;
-                                    }*/
-                                    //{
-                                    //    continue;//
-                                    //    //index++;
-                                    //    //break;
-                                    //}
-                                    otyObj obj;
-
-                                    obj = Eval(new otyObj(/*getObj*/(data.result[index].Obj), data.result, index));
-                                    index = obj.index;
-
-                                    //if (!obj.isNull())
-                                    {
-                                        data = new otyObj(obj.Obj, data.result, index);
-                                        param.Add(data);
-                                    }
-
-                                    //if (r[index].otyParnum == otyParnum.rightparent) { index++; break; }
-
-
-                                    //if (r[index + 1].otyParnum == otyParnum.rightparent) {  index++; break; }
-
-                                    //index++;
-                                    //if (r[index].otyParnum == otyParnum.rightparent && r[index + 1].otyParnum != otyParnum.comma) { break; }
-
-                                    //index++;
-                                    /*if (index + 1 <= r.Count)
-                                    {
-                                        if (r[index + 1].otyParnum == otyParnum.comma || r[index].otyParnum == otyParnum.comma)
-                                            index++;
-                                        else if (r[index].otyParnum == otyParnum.rightparent) break; 
-                                    }
-                                    else
-                                    {
-                                        if (r[index].otyParnum == otyParnum.comma)
-                                            index++;
-                                        else if (r[index].otyParnum == otyParnum.rightparent) break;
-                                    } */
-
-
-
-
-                                }
-                            }
-                            otyObj result;
-                            if (!scoped)
-                            {
-                                
-                                if (this.Var.ContainsKey(oo.result[oo.index].Name) || df.Type == otyType.Function)
-                                {
-                                    otyObj funcobj;
-                                    if (df.Type == otyType.Function)
-                                        funcobj = df;
-                                    else
-                                        funcobj = this.Var[oo.result[oo.index].Name];
-                                    var scope = new otyRun(new otypar
-                                    {
-                                        result = this.result//result = this.result.GetRange(i + 1, this.result.Count - i - 1)
-                                    }, funcobj.Function.index + 1, this);
-                                    int jk = 0;
-                                    foreach (var ik in param)
-                                    {
-                                        scope.Variable.Add(funcobj.Function.Param[jk], ik);
-                                        jk++;
-                                    }
-                                    scope.FuncFlg = true;
-                                    result = scope.Run();
-                                }
-                                else
-                                    result = this.DefFunc.RunFunc(oo.result[oo.index].Name, param, this);//result = this.DefFunc.RunFunc(oo.result[oo.index/*-1*/].Name, param,this);
-                            }
-                            else
-                            {
-                                //index++;
-                                result = df.Func(oo.result[oo.index/*-1*/].Name, param);
-                                //index++;
-                                //data.index++;
-                            }/*if (!result.isNull())
-                            {
-                                result.index = data.index;
-                                result.result = data.result;
-                                data = result;
-                            }*/
-                            // return data;
-                            //if (!result.isNull())
-                            if (index + 1 == ii)
-                            {//引数なし
-                                data.index = ii;
-                            }
-                            {
-                                result.index = data.index;
-                                result.result = data.result;
-
-                            } data = result;// return data;
-
-                            if (index + 2 <= r.Count) ;//{ data.index++; index++; }
-                            else
-                            {
-                                return data;
-                            }
-                        }
-                        else
-                        {
-                            if (index + 2 <= r.Count)
-                            {
-                                if (r[index + 1].otyParnum == otyParnum.identifier)
-                                {
-                                    if (r[index + 2].otyParnum == otyParnum.rightparent)
-                                    {
-                                        string type = r[index + 1].Name;
-                                        index += 3;
-                                        var obj = Eval(new otyObj(/*getObj*/(data.result[index].Obj), data.result, index));
-                                        index = obj.index;
-                                        data = new otyObj(obj.Obj, data.result, index);
-                                        data.Cast(type);
-                                        break;
-                                    }
-                                    else if (r[index + 2].otyParnum == otyParnum.multiply)
-                                    {
-                                        if (index + 3 <= r.Count)
-                                        {
-                                            if (r[index + 3].otyParnum == otyParnum.rightparent)
-                                            {
-                                                string type = r[index + 1].Name;
-                                                index += 4;
-                                                var obj = Eval(new otyObj(/*getObj*/(data.result[index].Obj), data.result, index));
-                                                index = obj.index;
-                                                data = new otyObj(obj.Obj, data.result, index);
-                                                data = data.PtrCast(type); data.result = r; data.index = index;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            var iii = this.ParentSkip(index, -1) + 1;
-                            while (true)//r[index + 1].otyParnum != otyParnum.rightparent)
-                            {
-                                index++;
-                                if (index >= iii - 2)
-                                {
-                                    index = iii - 2;//多分これで+1;
-                                    break;
-                                }
-                                var obj = Eval(new otyObj(/*getObj*/(data.result[index].Obj), data.result, index));
-                                index = obj.index;
-                                data = new otyObj(obj.Obj, data.result, index);
-                            }//if (r[index + 1].otyParnum != otyParnum.rightparent) goto case otyParnum.leftparent;
-
-                            data.index++;
-                            index++;
-                            if (index + 1 <= r.Count)
-                            {
-                                //  return data;sd
-                            }
-                        }
+                    case otyParnum.plus:
+                        if (opera < PointerPrece) break;
+                        data = Eval(new otyObj(r[index + 1].Obj, r, index + 1), PointerPrece);//new otyObj(getObj(j), r, index);
+                        index = data.index;
+                        data = otyOpera.UnaryPlus(data);
+                        data.index = index;
+                        data.result = r;
                         break;
-                    case otyParnum.identifier:
-
-                        if (index + 1 <= r.Count)
-
-                            if (r[index + 1].otyParnum == otyParnum.leftparent)
-                            {
-                                //data.index++;
-                                test = true;
-                                index++;
-                                goto case otyParnum.leftparent;
-                            }
-                            else
-                            {
-                                if (scoped)
-                                {
-                                    data = data.GetMember(k.Name);
-                                    data.result = r; data.index = index;
-                                }
-                                else
-                                    //this.Var[r[index].Name].result = r;
-                                    //this.Var[r[index].Name].index = index;
-                                    data = new otyObj(getObj(k), r, oo.index);//this.Var[r[index].Name];
-
-                            }
-                        /*else if (index + 2 <= r.Count)
-
-                            if (r[index + 1].otyParnum == otyParnum.plus && r[index + 1].otyParnum == otyParnum.plus)
-                            {
-                                //data.index++;
-                                test = true;
-                                index++;
-                                goto case otyParnum.leftparent;
-                            }*/
-
-
-                        try
-                        {
-                            //new otyObj(getObj(k), r, oo.index);
-                        }
-                        catch
-                        {
-                        }
-                        break;
-                }
+                    
+            }
             if (data.Type == otyType.Function)
             {
                 if (index + 1 <= r.Count)

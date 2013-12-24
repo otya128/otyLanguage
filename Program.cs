@@ -236,8 +236,10 @@ var str=""簡単に言うと数学で言う「!」のことか"";for(int ptr=&st
 ";
             Console.Clear();
             Console.Title = "";
-            Console.WriteLine("otyScript");main:
-            prg = Console.ReadLine();
+            Console.WriteLine("otyScript");
+        main:
+            prg = @"var ptr=malloc(100);
+*(&ptr)=""aa"";print((string*)ptr);print();";//prg = Console.ReadLine();
             op.Parse(prg); int j=1;
             // Console.WriteLine(1 + j = 1);
             Console.WriteLine(prg);
@@ -261,7 +263,7 @@ var str=""簡単に言うと数学で言う「!」のことか"";for(int ptr=&st
             Console.WriteLine();
             or = new otyRun();
             op = new otypar();
-            goto main;
+            Console.ReadLine(); goto main;
             //Console.ReadLine();
             //Main(null);
         }
