@@ -12,6 +12,33 @@ namespace otypar
         {
             if (arg1) return new otyObj(1); else return new otyObj(0);
         }
+        public static otyObj UnaryPlus(otyObj arg1)
+        {
+            switch (arg1.Type)
+            {
+                /*case otyType.Pointer:
+                    return new otyObj((void*)(arg1.Ptr.Address + (int)arg2.Num));
+                */
+                case otyType.Int32:
+                    return new otyObj(+arg1.Num);
+                case otyType.Double:
+                    return new otyObj(+arg1.Double);
+            }
+            throw new ArgumentException("oty型'" + arg1.Type + "'に+単項演算子を適用できません。");
+        }
+        public static otyObj UnaryMinus(otyObj arg1)
+        {
+            switch (arg1.Type)
+            {
+                /*case otyType.Pointer: return new otyObj((void*)(arg1.Ptr.Address - (int)arg2.Num));
+                */
+                case otyType.Int32:
+                    return new otyObj(-arg1.Num);
+                case otyType.Double:
+                    return new otyObj(-arg1.Double);
+            }
+            throw new ArgumentException("oty型'" + arg1.Type + "'に-単項演算子を適用できません。");
+        }
         public static otyObj Add(otyObj arg1, otyObj arg2)
         {
             switch (arg1.Type)

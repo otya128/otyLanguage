@@ -234,6 +234,10 @@ print('t');
 var str=""hoge"";var length=str.Length;print(&str+length*2-1);
 var str=""簡単に言うと数学で言う「!」のことか"";for(int ptr=&str+str.Length*2-1;ptr>=&str;ptr-=2){print((string*)ptr);}
 ";
+            Console.Clear();
+            Console.Title = "";
+            Console.WriteLine("otyScript");main:
+            prg = Console.ReadLine();
             op.Parse(prg); int j=1;
             // Console.WriteLine(1 + j = 1);
             Console.WriteLine(prg);
@@ -254,7 +258,12 @@ var str=""簡単に言うと数学で言う「!」のことか"";for(int ptr=&st
             {
                // Console.WriteLine("{0}\t{1}", i.Key,i.Value.Obj);
             }
-            Console.ReadLine();
+            Console.WriteLine();
+            or = new otyRun();
+            op = new otypar();
+            goto main;
+            //Console.ReadLine();
+            //Main(null);
         }
     }
 }

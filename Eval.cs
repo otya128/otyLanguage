@@ -91,10 +91,26 @@ namespace otypar
             if (index + 1 <= r.Count)
             {
             start:
-                
+
                 switch (k.otyParnum)
                 {
-                        case otyParnum.and:
+                    case otyParnum.minus:
+                        if (opera < PointerPrece) break;
+                        data = Eval(new otyObj(r[index + 1].Obj, r, index + 1), PointerPrece);//new otyObj(getObj(j), r, index);
+                        index = data.index;
+                        data = otyOpera.UnaryMinus(data);
+                        data.index = index;
+                        data.result = r;
+                        break;
+                    case otyParnum.plus:
+                        if (opera < PointerPrece) break;
+                        data = Eval(new otyObj(r[index + 1].Obj, r, index + 1), PointerPrece);//new otyObj(getObj(j), r, index);
+                        index = data.index;
+                        data = otyOpera.UnaryPlus(data);
+                        data.index = index;
+                        data.result = r;
+                        break;
+                    case otyParnum.and:
                         if (opera < PointerPrece) break;
                         unsafe
                         {
@@ -172,12 +188,12 @@ namespace otypar
                         break;
                     case otyParnum.leftparent:
                         bool test = false;
-                        if (data.result[index - 1].otyParnum == otyParnum.identifier||func)
+                        if (data.result[index - 1].otyParnum == otyParnum.identifier || func)
                         {
-                        
+
                             otyObj df = otyObj.NULL;
-                          //  if (scoped) 
-                                df = data;
+                            //  if (scoped) 
+                            df = data;
                             List<otyObj> param = new List<otyObj>(); //index++;
                             int parent = 0;
                             int ii = index;
@@ -192,87 +208,96 @@ namespace otypar
                                 {
 
                                     parent--;
-                                    if (parent == 0) 
+                                    if (parent == 0)
                                         break;
                                 }
                                 ii++;
                             }
-                            ii++;
-                            //関数!!
-                            while (true)
+                            if (index + 1 == ii)
+                            {//引数なし
+                                data.index = oo.index;
+                            }
+                            else
                             {
-                                index++;
-                                
-                                if (index >= ii - 1)
+                                ii++;
+                                //関数!!
+                                while (true)
                                 {
-                                    index = ii-1;//+1;
-                                    break;
-                                    if (r[index].otyParnum == otyParnum.rightparent) { index++; break; } if (r[index + 1].otyParnum == otyParnum.rightparent) { index++; break; }
                                     index++;
-                                    //
-                                } 
-                                if (r[index].otyParnum == otyParnum.comma) { 
-                                    continue;
-                                }
-                                if (r[index].otyParnum == otyParnum.rightparent)
-                                {
-                                    continue;
-                                }
-                                /*if (r[index].otyParnum == otyParnum.rightparent)
-                                {
-                                    index = ii + 1;
-                                    break;
-                                }*///{
-                                //    continue;//
-                                //    //index++;
-                                //    //break;
-                                //}
-                                otyObj obj;
-                                
-                                    obj = Eval(new otyObj(/*getObj*/(data.result[index].Obj), data.result, index));
-                                index = obj.index;
 
-                                //if (!obj.isNull())
-                                {
-                                    data = new otyObj(obj.Obj, data.result, index);
-                                    param.Add(data);
-                                }
-
-                                //if (r[index].otyParnum == otyParnum.rightparent) { index++; break; }
-                                    
-                                
-                                //if (r[index + 1].otyParnum == otyParnum.rightparent) {  index++; break; }
-                                
-                                //index++;
-                                //if (r[index].otyParnum == otyParnum.rightparent && r[index + 1].otyParnum != otyParnum.comma) { break; }
-
-                                //index++;
-                                /*if (index + 1 <= r.Count)
-                                {
-                                    if (r[index + 1].otyParnum == otyParnum.comma || r[index].otyParnum == otyParnum.comma)
+                                    if (index >= ii - 1)
+                                    {
+                                        index = ii - 1;//+1;
+                                        break;
+                                        if (r[index].otyParnum == otyParnum.rightparent) { index++; break; } if (r[index + 1].otyParnum == otyParnum.rightparent) { index++; break; }
                                         index++;
-                                    else if (r[index].otyParnum == otyParnum.rightparent) break; 
-                                }
-                                else
-                                {
+                                        //
+                                    }
                                     if (r[index].otyParnum == otyParnum.comma)
-                                        index++;
-                                    else if (r[index].otyParnum == otyParnum.rightparent) break;
-                                } */
+                                    {
+                                        continue;
+                                    }
+                                    if (r[index].otyParnum == otyParnum.rightparent)
+                                    {
+                                        continue;
+                                    }
+                                    /*if (r[index].otyParnum == otyParnum.rightparent)
+                                    {
+                                        index = ii + 1;
+                                        break;
+                                    }*/
+                                    //{
+                                    //    continue;//
+                                    //    //index++;
+                                    //    //break;
+                                    //}
+                                    otyObj obj;
+
+                                    obj = Eval(new otyObj(/*getObj*/(data.result[index].Obj), data.result, index));
+                                    index = obj.index;
+
+                                    //if (!obj.isNull())
+                                    {
+                                        data = new otyObj(obj.Obj, data.result, index);
+                                        param.Add(data);
+                                    }
+
+                                    //if (r[index].otyParnum == otyParnum.rightparent) { index++; break; }
+
+
+                                    //if (r[index + 1].otyParnum == otyParnum.rightparent) {  index++; break; }
+
+                                    //index++;
+                                    //if (r[index].otyParnum == otyParnum.rightparent && r[index + 1].otyParnum != otyParnum.comma) { break; }
+
+                                    //index++;
+                                    /*if (index + 1 <= r.Count)
+                                    {
+                                        if (r[index + 1].otyParnum == otyParnum.comma || r[index].otyParnum == otyParnum.comma)
+                                            index++;
+                                        else if (r[index].otyParnum == otyParnum.rightparent) break; 
+                                    }
+                                    else
+                                    {
+                                        if (r[index].otyParnum == otyParnum.comma)
+                                            index++;
+                                        else if (r[index].otyParnum == otyParnum.rightparent) break;
+                                    } */
 
 
 
 
+                                }
                             }
                             otyObj result;
                             if (!scoped)
                             {
-
-                                if (this.Var.ContainsKey(oo.result[oo.index].Name)||df.Type == otyType.Function)
+                                
+                                if (this.Var.ContainsKey(oo.result[oo.index].Name) || df.Type == otyType.Function)
                                 {
                                     otyObj funcobj;
-                                    if (df.Type == otyType.Function) 
-                                        funcobj = df; 
+                                    if (df.Type == otyType.Function)
+                                        funcobj = df;
                                     else
                                         funcobj = this.Var[oo.result[oo.index].Name];
                                     var scope = new otyRun(new otypar
@@ -289,12 +314,12 @@ namespace otypar
                                     result = scope.Run();
                                 }
                                 else
-                                result = this.DefFunc.RunFunc(oo.result[oo.index].Name, param, this);//result = this.DefFunc.RunFunc(oo.result[oo.index/*-1*/].Name, param,this);
+                                    result = this.DefFunc.RunFunc(oo.result[oo.index].Name, param, this);//result = this.DefFunc.RunFunc(oo.result[oo.index/*-1*/].Name, param,this);
                             }
                             else
                             {
                                 //index++;
-                                result = df.Func(oo.result[oo.index/*-1*/].Name,param);
+                                result = df.Func(oo.result[oo.index/*-1*/].Name, param);
                                 //index++;
                                 //data.index++;
                             }/*if (!result.isNull())
@@ -305,6 +330,10 @@ namespace otypar
                             }*/
                             // return data;
                             //if (!result.isNull())
+                            if (index + 1 == ii)
+                            {//引数なし
+                                data.index = ii;
+                            }
                             {
                                 result.index = data.index;
                                 result.result = data.result;
@@ -351,7 +380,7 @@ namespace otypar
                                     }
                                 }
                             }
-                            var iii = this.ParentSkip(index,-1)+1;
+                            var iii = this.ParentSkip(index, -1) + 1;
                             while (true)//r[index + 1].otyParnum != otyParnum.rightparent)
                             {
                                 index++;
@@ -392,10 +421,10 @@ namespace otypar
                                     data.result = r; data.index = index;
                                 }
                                 else
-                                //this.Var[r[index].Name].result = r;
-                                //this.Var[r[index].Name].index = index;
-                                data = new otyObj(getObj(k), r, oo.index);//this.Var[r[index].Name];
-                                
+                                    //this.Var[r[index].Name].result = r;
+                                    //this.Var[r[index].Name].index = index;
+                                    data = new otyObj(getObj(k), r, oo.index);//this.Var[r[index].Name];
+
                             }
                         /*else if (index + 2 <= r.Count)
 
