@@ -504,7 +504,7 @@ namespace otypar
                                 this.index = i;
                                 return otyObj.Void;
                             default:
-                                //throw new FormatException("認識できないトークン" + j.otyParnum);
+                                throw new FormatException("認識できないトークン" + j.otyParnum);
                                 var obj = Eval(new otyObj(result[i].Obj, result, i));
                                 i = obj.index;
                                 break;

@@ -170,6 +170,7 @@ namespace otypar
                             {//引数なし
                                 data.index = ii; index = ii;
                             }
+                            data.index = index;
                             result.index = data.index;
                             result.result = data.result;
                             data = result;// return data;
