@@ -600,14 +600,14 @@ namespace otypar
                         if (k.otyParnum != otyParnum.identifier) throw new FormatException(k.otyParnum + "に代入できません。これはidentifierである必要がありまあす。");
                         if (!isVar) this.Var[k.Name].Increment(); else data.Increment();
                         index++;
-                        index++; j = r[index];
+                        index++; j = r[index];data.index=index;
                         if (Operator(j.otyParnum) >= IncrementPrece) { index--; opera = 17;/* k = r[index - 1];*/ goto start2; }
                         break;
                     case otyParnum.minusminus:
                         if (opera < IncrementPrece) break;
                         if (k.otyParnum != otyParnum.identifier) throw new FormatException(k.otyParnum + "に代入できません。これはidentifierである必要がありまあす。");
                         if (!isVar) this.Var[k.Name].Decrement(); else data.Decrement();
-                        index++; j = r[index];
+                        index++; j = r[index];data.index=index;
                         if (Operator(j.otyParnum) >= IncrementPrece) { index--; opera = 17;/* k = r[index - 1];*/ goto start2; }
                         index++;
                         break;

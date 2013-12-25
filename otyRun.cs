@@ -480,11 +480,11 @@ namespace otypar
 
                                 break;
 
-                            case otyParnum.num:
+                            /*case otyParnum.num:
                                 var obj = Eval(new otyObj(j.Num, result, i));
                                 i = obj.index;
                                 //Console.Write(j.otyParnum);Console.WriteLine(obj.Obj);
-                                break;
+                                break;*/
                             case otyParnum.blockstart:
                                 var scope = new otyRun(new otypar
                                 {
@@ -504,7 +504,8 @@ namespace otypar
                                 this.index = i;
                                 return otyObj.Void;
                             default:
-                                obj = Eval(new otyObj(result[i].Obj, result, i));
+                                //throw new FormatException("認識できないトークン" + j.otyParnum);
+                                var obj = Eval(new otyObj(result[i].Obj, result, i));
                                 i = obj.index;
                                 break;
                         }
