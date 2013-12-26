@@ -414,7 +414,7 @@ namespace otypar
                                 data.Obj = obj.Obj;
                             }
                         }
-                        index++; j = r[index]; if (Operator(j.otyParnum) >= EqualPrece) { index--; opera = 17; k = r[index]; goto start; }
+                        index++; data.index=index;j = r[index]; if (Operator(j.otyParnum) >= EqualPrece) { index--;data.index=index; opera = 17; k = r[index]; goto start; }
                         break;
                 }
                 switch (j.otyParnum)
@@ -515,8 +515,8 @@ namespace otypar
                         obj = Eval(new otyObj(data.result[index].Obj, data.result, index), MinusPrece);
                         index = obj.index;
                         data.Sub(obj);
-                        data.index = index;
-                        index++; j = r[index]; if (Operator(j.otyParnum) >= MinusPrece) { index--; opera = 17; k = r[index]; goto start; }
+                        //data.index = index;
+                        index++; j = r[index];data.index = index; if (Operator(j.otyParnum) >= MinusPrece) { index--;data.index = index; opera = 17; k = r[index]; goto start; }
                         break;
                 }
                 switch (j.otyParnum)
@@ -600,7 +600,7 @@ namespace otypar
                         if (opera < IncrementPrece) break;
                         if (k.otyParnum != otyParnum.identifier) throw new FormatException(k.otyParnum + "に代入できません。これはidentifierである必要がありまあす。");
                         if (!isVar) this.Var[k.Name].Increment(); else data.Increment();
-                        index++;
+                        //index++;
                         index++; j = r[index];data.index=index;
                         if (Operator(j.otyParnum) >= IncrementPrece) { index--; opera = 17;/* k = r[index - 1];*/ goto start2; }
                         break;
@@ -610,7 +610,7 @@ namespace otypar
                         if (!isVar) this.Var[k.Name].Decrement(); else data.Decrement();
                         index++; j = r[index];data.index=index;
                         if (Operator(j.otyParnum) >= IncrementPrece) { index--; opera = 17;/* k = r[index - 1];*/ goto start2; }
-                        index++;
+                        //index++;
                         break;
                 }
                 switch (j.otyParnum)
@@ -619,7 +619,7 @@ namespace otypar
                         //最後だからいらないif (opera < PlusEqualPrece) break;
                         index++;
                         var obj = Eval(new otyObj(/*getObj*/(data/*.result[index]*/.Obj), data.result, index), PlusEqualPrece, true);
-                        index = obj.index;
+                        index = obj.index+1;
                         data = obj;
                         data.index = obj.index + 1;
                         //最後だからいらないindex++; j = r[index]; if (Operator(j.otyParnum) >= PlusEqualPrece) { index--; opera = 17; k = r[index - 1]; goto start; }

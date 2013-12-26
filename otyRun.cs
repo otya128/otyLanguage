@@ -503,10 +503,14 @@ namespace otypar
                             case otyParnum.blockend:
                                 this.index = i;
                                 return otyObj.Void;
-                            default:
-                                throw new FormatException("認識できないトークン" + j.otyParnum);
+                            case otyParnum.multiply:
                                 var obj = Eval(new otyObj(result[i].Obj, result, i));
                                 i = obj.index;
+                                break;
+                            default:
+                                throw new FormatException("認識できないトークン'" + j.Name + "'" + j.otyParnum);
+                                //var obj = Eval(new otyObj(result[i].Obj, result, i));
+                                //i = obj.index;
                                 break;
                         }
 
