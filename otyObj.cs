@@ -38,8 +38,8 @@ namespace otypar
         {
             return this.Obj == null;
         }
-        public static otyObj NULL = new otyObj();
-        public static otyObj Void = new otyObj();//区別
+        public static otyObj NULL = new otyObj { IsConst = true };
+        public static otyObj Void = new otyObj { IsConst = true };//区別
         otyObj()
         {
         }
@@ -174,7 +174,20 @@ namespace otypar
                     break;
             }
         }
-
+        public otyObjType ObjType;
+        public bool IsConst
+        {
+            get
+            {
+                return this.ObjType.HasFlag(otyObjType.Const);
+            }
+            set
+            {
+                if (value)
+                    this.ObjType |= otyObjType.Const;
+                else this.ObjType &= this.ObjType | ~otyObjType.Const;
+            }
+        }
         public otyType Type = otyType.Int32;
         object obj;
         public object Obj
@@ -185,6 +198,7 @@ namespace otypar
             }
             set
             {
+                if (this.IsConst) throw new InvalidOperationException("この値は書き換えられません。" + Obj + "=" + value);
                 if (value != null)
                     if (value.GetType().Name == "Int32")
                         Type = otyType.Int32;

@@ -251,7 +251,7 @@ bool isbreak = 0;
 for(int i=0;i<BF.Length;i++)
 {
   var B = BF[i];
-  if(isbreak)if(B==']')isbreak=0;
+  if(isbreak && B==']')isbreak=0;
   if(B=='[')
   {
     if(memory[pointer]==0) isbreak=1;
@@ -293,7 +293,7 @@ for(int i=0;i<BF.Length;i++)
          //   prg = "v S=\">+++++++++[<++++++++>-]<.>+++++++[<++++>-]<+.+++++++..+++.[-]>++++++++[<++++>-]<.>+++++++++++[<+++++>-]<.>++++++++[<+++>-]<.+++.------.--------.[-]>++++++++[<++++>-]<+.[-]++++++++++.\";v[999]m;for(v i=0;i<m.Length;i++){m[i]=0;}v p=0;v f=0;for(int i=0;i<S.Length;i++){var B=S[i];if(f)if(B==']')f=0;if(B=='[')if(m[p]==0)f++;if(B==']'){if(m[p]!=0){for(v j=i;j>0;j--){if(S[j]=='['){i=j-1;j=-1;}}}}if(B=='<')p--;if(B=='>')p++;if(B=='+')m[p]++;if(B=='-')m[p]--;if(B=='.')printf(\"{0}\",(char)m[p]);}";
        // prg = @"var ptr=malloc(100);*ptr=""a"";print(print(1+1).GetType(),(string*)ptr);int i=0;i--;i++;i=i+1;i=i*2;";
        // prg = @"int i=0;i--;i++;i=i>>1;i=i*2;";
-       // prg = @"var a=65;a++;print((char)a);";
+        //prg = @"var null=1;print(null);";
             // Console.WriteLine(1 + j = 1);
             Console.WriteLine(prg);
             op.Parse(prg); foreach (var i in op.result)

@@ -34,8 +34,16 @@ namespace otypar
                 }
                 if (this.Variable.Parent != otyRun.Empty)
                 {
-                    var ret=getVariable(this.Variable.Parent, name);
+                    var ret = getVariable(this.Variable.Parent, name);
                     return ret;
+                }
+                else
+                {
+                    switch (name)
+                    {
+                        case "null":
+                            return otyObj.NULL;
+                    }
                 }
                 throw new ArgumentException("変数" + name + "が存在しません。");
             }
@@ -49,6 +57,10 @@ namespace otypar
                 {
                     if (setVariable(this.Variable, name, value)) return;
                 }
+                else
+                {
+                    SetConstValue(name);
+                }
                 this.Variable.Variable[name] = value;
             }
         }
@@ -61,7 +73,11 @@ namespace otypar
             }
             if (ov.Parent != otyRun.Empty)
             {
-                return setVariable(ov.Parent, name,value);
+                return setVariable(ov.Parent, name, value);
+            }
+            else
+            {
+                SetConstValue(name);
             }
             return false;
         }
@@ -94,6 +110,14 @@ namespace otypar
             {
                 return getVariable(ov.Parent, name);
             }
+            else
+            {
+                switch (name)
+                {
+                    case "null":
+                        return otyObj.NULL;
+                }
+            }
             throw new ArgumentException("変数" + name + "が存在しません。");
         }
         public bool ContainsKey(string name)
@@ -121,6 +145,16 @@ namespace otypar
                 return ContainsKey(ov.Parent, name);
             }
             return false;
+        }
+        public static void SetConstValue(string name)
+        {
+            switch (name)
+            {
+                case "true":
+                case "false":
+                case "null":
+                    throw new InvalidOperationException(name + "の値を変更できません。");
+            }
         }
     }
     public partial class otyRun
@@ -539,7 +573,9 @@ namespace otypar
 
                                 state = otyrunstate.None; break;
                             case otyParnum.equal:
-                                obj = Eval(new otyObj(this.Var/*iable*/[result[i - 1].Name], result, i - 1));
+                                this.Var[result[i - 1].Name].result = result;
+                                this.Var[result[i - 1].Name].index = i-1;
+                                obj = Eval(this.Var/*iable*/[result[i - 1].Name]);
                                 i = obj.index;
                                 //Console.Write(j.otyParnum);Console.WriteLine(obj.Obj);
                                 //代入

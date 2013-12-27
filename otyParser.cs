@@ -145,6 +145,7 @@ namespace otypar
             {
                 bool last = i + 1 < p.Length;
                 char j = p[i];
+                char nextchar = '\0'; if (i + 1 < p.Length) nextchar = p[i + 1];
                 switch (state)
                 {
                     case otyparstate.IdenRead:
@@ -304,62 +305,57 @@ namespace otypar
                                         state = otyparstate.SingleStrRead;
                                         break;
                                     case '+':
-                                        if (i + 1 < p.Length)
-                                            if (p[i + 1] == '+')
-                                            {
-                                                result.Add(new otyParc(otyParnum.plusplus, "++"));
-                                                i++;
-                                                break;
-                                            }
-                                            else if (p[i + 1] == '=')
-                                            {
-                                                result.Add(new otyParc(otyParnum.plusequal, "+="));
-                                                i++;
-                                                break;
-                                            }
+                                        if (nextchar == '+')
+                                        {
+                                            result.Add(new otyParc(otyParnum.plusplus, "++"));
+                                            i++;
+                                            break;
+                                        }
+                                        else if (nextchar == '=')
+                                        {
+                                            result.Add(new otyParc(otyParnum.plusequal, "+="));
+                                            i++;
+                                            break;
+                                        }
                                         result.Add(new otyParc(otyParnum.plus, "+"));
 
                                         break;
                                     case '-':
-                                        if (i + 1 < p.Length)
-                                            if (p[i + 1] == '-')
-                                            {
-                                                result.Add(new otyParc(otyParnum.minusminus, "--"));
-                                                i++;
-                                                break;
-                                            }
-                                            else if (p[i + 1] == '=')
-                                            {
-                                                result.Add(new otyParc(otyParnum.minusequal, "-="));
-                                                i++;
-                                                break;
-                                            }
+                                        if (nextchar == '-')
+                                        {
+                                            result.Add(new otyParc(otyParnum.minusminus, "--"));
+                                            i++;
+                                            break;
+                                        }
+                                        else if (nextchar == '=')
+                                        {
+                                            result.Add(new otyParc(otyParnum.minusequal, "-="));
+                                            i++;
+                                            break;
+                                        }
                                         result.Add(new otyParc(otyParnum.minus, "-"));
 
                                         break;
                                     case '*':
-                                        if (i + 1 < p.Length)
-                                            if (p[i + 1] == '=') { result.Add(new otyParc(otyParnum.multiplyequal, "*=")); i++; break; }
+                                        if (nextchar == '=') { result.Add(new otyParc(otyParnum.multiplyequal, "*=")); i++; break; }
                                         result.Add(new otyParc(otyParnum.multiply, "*"));
                                         break;
                                     case '=':
-                                        if (i + 1 < p.Length)
-                                            if (p[i + 1] == '=')
-                                            {
-                                                result.Add(new otyParc(otyParnum.equalequal, "=="));
-                                                i++;
-                                                break;
-                                            }
+                                        if (nextchar == '=')
+                                        {
+                                            result.Add(new otyParc(otyParnum.equalequal, "=="));
+                                            i++;
+                                            break;
+                                        }
                                         result.Add(new otyParc(otyParnum.equal, "="));
                                         break;
                                     case '!':
-                                        if (i + 1 < p.Length)
-                                            if (p[i + 1] == '=')
-                                            {
-                                                result.Add(new otyParc(otyParnum.notequal, "!="));
-                                                i++;
-                                                break;
-                                            }
+                                        if (nextchar == '=')
+                                        {
+                                            result.Add(new otyParc(otyParnum.notequal, "!="));
+                                            i++;
+                                            break;
+                                        }
                                         result.Add(new otyParc(otyParnum.notnot, "!"));
                                         break;
                                     case ';':
@@ -372,49 +368,45 @@ namespace otypar
                                         result.Add(new otyParc(otyParnum.blockend, "}"));
                                         break;
                                     case '<':
-                                        if (i + 1 < p.Length)
-                                            if (p[i + 1] == '=')
-                                            {
-                                                result.Add(new otyParc(otyParnum.lessequal, "<="));
-                                                i++;
-                                                break;
-                                            }
-                                            else if (p[i + 1] == '<')
-                                            {
-                                                result.Add(new otyParc(otyParnum.leftshift, "<<"));
-                                                i++;
-                                                break;
-                                            }
+                                        if (nextchar == '=')
+                                        {
+                                            result.Add(new otyParc(otyParnum.lessequal, "<="));
+                                            i++;
+                                            break;
+                                        }
+                                        else if (nextchar == '<')
+                                        {
+                                            result.Add(new otyParc(otyParnum.leftshift, "<<"));
+                                            i++;
+                                            break;
+                                        }
                                         result.Add(new otyParc(otyParnum.less, "<"));
                                         break;
                                     case '>':
-                                        if (i + 1 < p.Length)
-                                            if (p[i + 1] == '=')
-                                            {
-                                                result.Add(new otyParc(otyParnum.greaterequal, ">="));
-                                                i++;
-                                                break;
-                                            }
-                                            else if (p[i + 1] == '>')
-                                            {
-                                                result.Add(new otyParc(otyParnum.rightshift, ">>"));
-                                                i++;
-                                                break;
-                                            }
+                                        if (nextchar == '=')
+                                        {
+                                            result.Add(new otyParc(otyParnum.greaterequal, ">="));
+                                            i++;
+                                            break;
+                                        }
+                                        else if (nextchar == '>')
+                                        {
+                                            result.Add(new otyParc(otyParnum.rightshift, ">>"));
+                                            i++;
+                                            break;
+                                        }
                                         result.Add(new otyParc(otyParnum.greater, ">"));
                                         break;
                                     case '%':
-                                        if (i + 1 < p.Length)
-                                            if (p[i + 1] == '=') { result.Add(new otyParc(otyParnum.moduloequal, "%=")); i++; break; }
+                                        if (nextchar == '=') { result.Add(new otyParc(otyParnum.moduloequal, "%=")); i++; break; }
                                         result.Add(new otyParc(otyParnum.modulo, "%"));
                                         break;
                                     case '.':
                                         result.Add(new otyParc(otyParnum.dot, "."));
                                         break;
                                     case '/':
-                                        if (i + 1 < p.Length)
-                                            if (p[i + 1] == '/') { i++; state = otyparstate.LineCommentRead; break; }
-                                            else if (p[i + 1] == '=') { result.Add(new otyParc(otyParnum.divisionequal, "/=")); i++; break; }
+                                        if (nextchar == '/') { i++; state = otyparstate.LineCommentRead; break; }
+                                        else if (nextchar == '=') { result.Add(new otyParc(otyParnum.divisionequal, "/=")); i++; break; }
                                         result.Add(new otyParc(otyParnum.division, "/"));
                                         break;
                                     case '[':
@@ -427,6 +419,10 @@ namespace otypar
                                         result.Add(new otyParc(otyParnum.debbug_stop, "$"));
                                         break;
                                     case '&':
+                                        if (nextchar == '&')
+                                        {
+                                            result.Add(new otyParc(otyParnum.andand, "&&")); i++; break;
+                                        }
                                         result.Add(new otyParc(otyParnum.and, "&"));
                                         break;
                                     case '\r':
