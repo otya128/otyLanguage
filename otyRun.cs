@@ -606,6 +606,7 @@ namespace otypar
                                 break;
                             default:
                                 //error!!
+                               // throw new FormatException("認識できないトークン'" + j.Name + "'" + j.otyParnum);
                                 break;
                         }
                         break;
@@ -613,6 +614,12 @@ namespace otypar
                         switch (j.otyParnum)
                         {
                             case otyParnum.identifier:
+                                if (result[index + 1].otyParnum == otyParnum.leftparent)
+                                {
+                                    index = this.BlockSkip(index, -1);//手抜き
+                                    state = otyrunstate.None;
+                                    break;
+                                }
                                 otyObj obj;
                                 ///////////////////////debug!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
                                 try
@@ -639,14 +646,29 @@ namespace otypar
                                 //Console.Write(j.otyParnum);Console.WriteLine(obj.Obj);
                                 state = otyrunstate.None;
                                 break;
-                            default: obj = Eval(new otyObj(this.Var/*iable*/[result[index - 1].Name], result, index - 1));
+                            case otyParnum.leftbracket:
+                                int ar = this.ArraySkip(index, -1) + 1;
+                                if (result[ar].otyParnum != otyParnum.identifier)
+                                {
+                                    obj = Eval(new otyObj(this.Var/*iable*/[result[index - 1].Name], result, index - 1));
+                                    index = obj.index;
+                                    state = otyrunstate.None;
+                                    break;
+                                }
+                                //配列宣言
+                                obj = Eval(new otyObj(result[index + 1].Obj, result, index + 1));
+                                index = ar;
+                                this.Variable[result[index].Name] = otyObj.CreateArrayObj((int)obj.Num, this.result, index, otyType.Object);//new otyObj(new otyObj[(int)obj.Num], this.result, i, otyType.Array);
+                                break;
+                            default:
+                                obj = Eval(new otyObj(this.Var/*iable*/[result[index - 1].Name], result, index - 1));
                                 index = obj.index;
                                 state = otyrunstate.None;
                                 break;
                         }
                         break;
                 }
-
+                if (result[index].otyParnum == otyParnum.semicolon) return index;
                 index++;
             }
             return index;

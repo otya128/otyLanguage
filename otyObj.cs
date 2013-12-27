@@ -146,6 +146,9 @@ namespace otypar
                 case otyType.Int32:
                     this.Num += arg2.Num;//new otyObj(arg1.Num + arg2.Num);
                     break;
+                case otyType.Char:
+                    this.Char += arg2.Char;
+                    break;
                 case otyType.Double:
                     this.Double += arg2.Double;//new otyObj(arg1.Num + arg2.Num);
                     break;
@@ -162,6 +165,9 @@ namespace otypar
                 case otyType.Pointer:
                 case otyType.Int32:
                     this.Num -= arg2.Num;//new otyObj(arg1.Num + arg2.Num);
+                    break;
+                case otyType.Char:
+                    this.Char -= arg2.Char;
                     break;
                 case otyType.Double:
                     this.Double -= arg2.Double;//new otyObj(arg1.Num + arg2.Num);

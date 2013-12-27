@@ -424,7 +424,7 @@ namespace otypar
                         index++;
                         var obj = Eval(new otyObj(data.result[index].Obj, data.result, index), EqualEqualPrece);
                         index = obj.index;
-                        data = data.Equal(obj); data.result = r;
+                        data = otyOpera.Equal(data,obj);data.result=r;
                         data.index = obj.index;
                         index++; j = r[index]; if (Operator(j.otyParnum) >= EqualEqualPrece) { index--; opera = 17; k = r[index]; goto start; }
                         break;
@@ -445,7 +445,7 @@ namespace otypar
                         index++;
                         var obj = Eval(new otyObj(data.result[index].Obj, data.result, index), LessPrece);
                         index = obj.index;
-                        data = data.Less(obj); data.result = r;
+                        data = otyOpera.Less(data,obj);data.result=r;
                         data.index = obj.index;
                         index++; j = r[index]; if (Operator(j.otyParnum) >= LessPrece) { index--; opera = 17; k = r[index]; goto start; }
                         break;
@@ -454,7 +454,7 @@ namespace otypar
                         index++;
                         obj = Eval(new otyObj(data.result[index].Obj, data.result, index), GreaterPrece);
                         index = obj.index;
-                        data = data.Greater(obj); data.result = r;
+                        data = otyOpera.Greater(data,obj);data.result=r;
                         data.index = obj.index;
                         index++; j = r[index]; if (Operator(j.otyParnum) >= ModuloPrece) { index--; opera = 17; k = r[index]; goto start; }
                         break;
@@ -463,7 +463,7 @@ namespace otypar
                         index++;
                         obj = Eval(new otyObj(data.result[index].Obj, data.result, index), LessPrece);
                         index = obj.index;
-                        data = data.LessEqual(obj); data.result = r;
+                        data = otyOpera.LessEqual(data,obj);data.result=r;
                         data.index = obj.index;
                         index++; j = r[index]; if (Operator(j.otyParnum) >= LessPrece) { index--; opera = 17; k = r[index]; goto start; }
                         break;
@@ -472,7 +472,7 @@ namespace otypar
                         index++;
                         obj = Eval(new otyObj(data.result[index].Obj, data.result, index), GreaterPrece);
                         index = obj.index;
-                        data = data.GreaterEqual(obj); data.result = r;
+                        data = otyOpera.GreaterEqual(data,obj);data.result=r;
                         data.index = obj.index;
                         index++; j = r[index]; if (Operator(j.otyParnum) >= ModuloPrece) { index--; opera = 17; k = r[index]; goto start; }
                         break;
@@ -484,7 +484,7 @@ namespace otypar
                         index++;
                         var obj = Eval(new otyObj(data.result[index].Obj, data.result, index), PlusPrece);
                         index = obj.index;
-                        data.LeftShift(obj);
+                        data = otyOpera.LeftShift(data,obj);data.result=r;
                         data.index = index;
                         index++; j = r[index]; if (Operator(j.otyParnum) >= PlusPrece) { index--; opera = 17; k = r[index]; goto start; }
                         break;
@@ -493,7 +493,7 @@ namespace otypar
                         index++;
                         obj = Eval(new otyObj(data.result[index].Obj, data.result, index), MinusPrece);
                         index = obj.index;
-                        data.RightShift(obj);
+                        data = otyOpera.RightShift(data,obj);data.result=r;
                         data.index = index;
                         index++; j = r[index]; if (Operator(j.otyParnum) >= MinusPrece) { index--; opera = 17; k = r[index]; goto start; }
                         break;
@@ -514,9 +514,9 @@ namespace otypar
                         index++;
                         obj = Eval(new otyObj(data.result[index].Obj, data.result, index), MinusPrece);
                         index = obj.index;
-                        data.Sub(obj);
-                        //data.index = index;
-                        index++; j = r[index];data.index = index; if (Operator(j.otyParnum) >= MinusPrece) { index--;data.index = index; opera = 17; k = r[index]; goto start; }
+                        data = otyOpera.Sub(data,obj);data.result=r;
+                        data.index = index;
+                        index++; j = r[index]; if (Operator(j.otyParnum) >= MinusPrece) { index--;data.index = index; opera = 17; k = r[index]; goto start; }
                         break;
                 }
                 switch (j.otyParnum)
@@ -527,7 +527,7 @@ namespace otypar
                         var obj = Eval(new otyObj(/*getObj*/(data.result[index].Obj), data.result, index), ModuloPrece);
                         index = obj.index;
                         data.index = index;
-                        data.Multply(obj);
+                        data = otyOpera.Multply(data,obj);data.result=r; data.index = index;
                         index++; j = r[index];
                         if (Operator(j.otyParnum) >= ModuloPrece)
                         {
@@ -558,8 +558,7 @@ namespace otypar
                         index++;
                         obj = Eval(new otyObj(data.result[index].Obj, data.result, index), ModuloPrece);
                         index = obj.index;
-                        data.index = index;
-                        data.Modulo(obj);
+                        data = otyOpera.Modulo(data,obj);data.result=r; data.index = index;
                         index++; j = r[index];
                         if (Operator(j.otyParnum) >= ModuloPrece)
                         {
@@ -572,8 +571,8 @@ namespace otypar
                         index++;
                         obj = Eval(new otyObj(/*getObj*/(data.result[index].Obj), data.result, index), DivisionPrece);
                         index = obj.index;
-                        data.index = index;
-                        data.Division(obj);
+                        data = otyOpera.Division(data,obj);data.result=r; data.index = index;
+                        //data.Division(obj);
                         index++; j = r[index];
                         if (Operator(j.otyParnum) >= DivisionPrece)
                         {
