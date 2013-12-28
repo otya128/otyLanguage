@@ -336,7 +336,7 @@ namespace otypar
             
             otyRun forscope = otyRun.Empty;
             var state = otyrunstate.None;
-            var status2 = otyrunstate.None;
+            //var status2 = otyrunstate.None;
             while (i < result.Count)
             {
                 var j = result[i];
@@ -545,7 +545,6 @@ namespace otypar
                                 throw new FormatException("認識できないトークン'" + j.Name + "'" + j.otyParnum);
                                 //var obj = Eval(new otyObj(result[i].Obj, result, i));
                                 //i = obj.index;
-                                break;
                         }
 
                         break;

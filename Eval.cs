@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace otypar
 {
+    public class Int
+    {
+        public Int(int i)
+        {
+            this.Item = i;
+        }
+        public int Item;
+    }
     public partial class otyRun
     {
         const int EqualPrece = 16;
@@ -84,14 +92,14 @@ namespace otypar
                     return 0;
             }
         }
-        otyObj Eval(otyObj oo, int opera = 17, bool scoped = false)//opera16
+        unsafe otyObj Eval(otyObj oo, int opera = 17, bool scoped = false, Int varvar = null)//opera16
         {
             bool isVar = false;//testcode
             var index = oo.index;
             var r = oo.result;
             var data = oo;
             var k = r[index];
-            bool func = false, setPointerAddress = true;
+            bool func = false;//, setPointerAddress = true;
             if (index + 1 <= r.Count)
             {
             start:
@@ -327,7 +335,22 @@ namespace otypar
                         data.index = index;
                         data.result = r;
                         break;
-
+                    case otyParnum.not:
+                        if (opera < PointerPrece) break;
+                        data = Eval(new otyObj(r[index + 1].Obj, r, index + 1), PointerPrece);//new otyObj(getObj(j), r, index);
+                        index = data.index;
+                        data = otyOpera.Not(data);
+                        data.index = index;
+                        data.result = r;
+                        break;
+                    case otyParnum.notnot:
+                        if (opera < PointerPrece) break;
+                        data = Eval(new otyObj(r[index + 1].Obj, r, index + 1), PointerPrece);//new otyObj(getObj(j), r, index);
+                        index = data.index;
+                        data = otyOpera.LogicNot(data);
+                        data.index = index;
+                        data.result = r;
+                        break;
                     case otyParnum.num:
                     case otyParnum.chr:
                     case otyParnum.str:

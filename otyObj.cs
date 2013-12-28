@@ -32,15 +32,29 @@ namespace otypar
             return this.Address.ToString();
         }
     }
+    public unsafe class otyObjNull:otyObj
+    {
+        public override object Obj
+        {
+            get
+            {
+                return base.obj;
+            }
+            set
+            {
+                if (this.IsConst) throw new InvalidOperationException("この値は書き換えられません。" + Obj + "=" + value);
+            }
+        }
+    }
     public unsafe class otyObj
     {
         public bool isNull()
         {
             return this.Obj == null;
         }
-        public static otyObj NULL = new otyObj { IsConst = true };
+        public static otyObjNull NULL = new otyObjNull { IsConst = true };
         public static otyObj Void = new otyObj { IsConst = true };//区別
-        otyObj()
+        public otyObj()
         {
         }
         public static otyObj CreateNullObj(List<otyParc> r, int i)
@@ -189,8 +203,8 @@ namespace otypar
             }
         }
         public otyType Type = otyType.Int32;
-        object obj;
-        public object Obj
+        protected object obj;
+        public virtual object Obj
         {
             get
             {
@@ -344,10 +358,8 @@ namespace otypar
                 case otyType.Pointer:
                 case otyType.Int32:
                     if (this.Num < arg2.Num) return new otyObj(1); else return new otyObj(0);
-                    break;
                 case otyType.Double:
                     if (this.Double < arg2.Double) return new otyObj(1); else return new otyObj(0);
-                    break;
             }
             throw new InvalidOperationException("oty型'" + this.Type + "'とoty型'" + arg2.Type + "'は比較できません。");
         }
@@ -358,10 +370,8 @@ namespace otypar
                 case otyType.Pointer:
                 case otyType.Int32:
                     if (this.Num > arg2.Num) return new otyObj(1); else return new otyObj(0);
-                    break;
                 case otyType.Double:
                     if (this.Double > arg2.Double) return new otyObj(1); else return new otyObj(0);
-                    break;
             } 
             throw new InvalidOperationException("oty型'" + this.Type + "'とoty型'" + arg2.Type + "'は比較できません。");
         }
@@ -372,10 +382,8 @@ namespace otypar
                 case otyType.Pointer:
                 case otyType.Int32:
                     if (this.Num <= arg2.Num) return new otyObj(1); else return new otyObj(0);
-                    break;
                 case otyType.Double:
                     if (this.Double <= arg2.Double) return new otyObj(1); else return new otyObj(0);
-                    break;
             }
             throw new InvalidOperationException("oty型'" + this.Type + "'とoty型'" + arg2.Type + "'は比較できません。");
         }
@@ -386,10 +394,8 @@ namespace otypar
                 case otyType.Pointer:
                 case otyType.Int32:
                     if (this.Num >= arg2.Num) return new otyObj(1); else return new otyObj(0);
-                    break;
                 case otyType.Double:
                     if (this.Double >= arg2.Double) return new otyObj(1); else return new otyObj(0);
-                    break;
             }
             throw new InvalidOperationException("oty型'" + this.Type + "'とoty型'" + arg2.Type + "'は比較できません。");
         }
