@@ -419,11 +419,18 @@ namespace otypar
                                         result.Add(new otyParc(otyParnum.debbug_stop, "$"));
                                         break;
                                     case '&':
-                                        if (nextchar == '&')
-                                        {
-                                            result.Add(new otyParc(otyParnum.andand, "&&")); i++; break;
-                                        }
+                                        if (nextchar == '&') { result.Add(new otyParc(otyParnum.andand, "&&")); i++; break; }
                                         result.Add(new otyParc(otyParnum.and, "&"));
+                                        break;
+                                    case '|':
+                                        if (nextchar == '|') { result.Add(new otyParc(otyParnum.oror, "||")); i++; break; }
+                                        result.Add(new otyParc(otyParnum.or, "|"));
+                                        break;
+                                    case '~':
+                                        result.Add(new otyParc(otyParnum.not, "~"));
+                                        break;
+                                    case '^':
+                                        result.Add(new otyParc(otyParnum.xor, "^"));
                                         break;
                                     case '\r':
                                     case '\n':

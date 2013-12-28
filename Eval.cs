@@ -11,6 +11,9 @@ namespace otypar
         const int EqualPrece = 16;
         const int AndPrece = 10;
         const int LogicAndPrece = 13;
+        const int XorPrece = 11;
+        const int OrPrece = 12;
+        const int LogicOrPrece = 14;
         const int PlusPrece = 6;
         const int MinusPrece = 6;
         const int GreaterPrece = 8;
@@ -478,16 +481,16 @@ namespace otypar
                     case otyParnum.lessequal:
                         if (opera < LessEqualPrece) break;
                         index++;
-                        obj = Eval(new otyObj(data.result[index].Obj, data.result, index), LessPrece);
+                        obj = Eval(new otyObj(data.result[index].Obj, data.result, index), LessEqualPrece);
                         index = obj.index;
                         data = otyOpera.LessEqual(data, obj); data.result = r;
                         data.index = obj.index;
-                        index++; j = r[index]; if (Operator(j.otyParnum) >= LessPrece) { index--; opera = 17; k = r[index]; goto start; }
+                        index++; j = r[index]; if (Operator(j.otyParnum) >= LessEqualPrece) { index--; opera = 17; k = r[index]; goto start; }
                         break;
                     case otyParnum.greaterequal:
                         if (opera < GreaterEqualPrece) break;
                         index++;
-                        obj = Eval(new otyObj(data.result[index].Obj, data.result, index), GreaterPrece);
+                        obj = Eval(new otyObj(data.result[index].Obj, data.result, index), GreaterEqualPrece);
                         index = obj.index;
                         data = otyOpera.GreaterEqual(data, obj); data.result = r;
                         data.index = obj.index;
@@ -496,7 +499,7 @@ namespace otypar
                     case otyParnum.and:
                         if (opera < AndPrece) break;
                         index++;
-                        obj = Eval(new otyObj(data.result[index].Obj, data.result, index), GreaterPrece);
+                        obj = Eval(new otyObj(data.result[index].Obj, data.result, index), AndPrece);
                         index = obj.index;
                         data = otyOpera.And(data, obj); data.result = r;
                         data.index = obj.index;
@@ -505,12 +508,38 @@ namespace otypar
                     case otyParnum.andand:
                         if (opera < LogicAndPrece) break;
                         index++;
-                        obj = Eval(new otyObj(data.result[index].Obj, data.result, index), GreaterPrece);
+                        obj = Eval(new otyObj(data.result[index].Obj, data.result, index), LogicAndPrece);
                         index = obj.index;
                         data = otyOpera.LogicAnd(data, obj); data.result = r;
                         data.index = obj.index;
                         index++; j = r[index]; if (Operator(j.otyParnum) >= LogicAndPrece) { index--; opera = 17; k = r[index]; goto start; }
                         break;
+                    case otyParnum.or:
+                        if (opera < OrPrece) break;
+                        index++;
+                        obj = Eval(new otyObj(data.result[index].Obj, data.result, index), OrPrece);
+                        index = obj.index;
+                        data = otyOpera.Or(data, obj); data.result = r;
+                        data.index = obj.index;
+                        index++; j = r[index]; if (Operator(j.otyParnum) >= OrPrece) { index--; opera = 17; k = r[index]; goto start; }
+                        break;
+                    case otyParnum.oror:
+                        if (opera < LogicOrPrece) break;
+                        index++;
+                        obj = Eval(new otyObj(data.result[index].Obj, data.result, index), LogicOrPrece);
+                        index = obj.index;
+                        data = otyOpera.LogicOr(data, obj); data.result = r;
+                        data.index = obj.index;
+                        index++; j = r[index]; if (Operator(j.otyParnum) >= LogicOrPrece) { index--; opera = 17; k = r[index]; goto start; }
+                        break;
+                    case otyParnum.xor:
+                        if (opera < XorPrece) break;
+                        index++;
+                        obj = Eval(new otyObj(data.result[index].Obj, data.result, index), XorPrece);
+                        index = obj.index;
+                        data = otyOpera.Xor(data, obj); data.result = r;
+                        data.index = obj.index;
+                        index++; j = r[index]; if (Operator(j.otyParnum) >= XorPrece) { index--; opera = 17; k = r[index]; goto start; }
                         break;
                     //}
                     //switch (j.otyParnum)
