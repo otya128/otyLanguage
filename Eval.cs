@@ -357,7 +357,7 @@ namespace otypar
                         //許す
                         break;
                     default:
-                        throw new FormatException("認識できないトークン'" + k.Name + "'" + k.otyParnum);
+                        throw new FormatException("認識できないトークン'" + k.Name + "'" + k.otyParnum + "これは演算子、変数、リテラルである必要があります。" + getSource(index));
                 }
                 if (data.Type == otyType.Function)
                 {
@@ -723,10 +723,40 @@ namespace otypar
                         //許す
                         break;
                     default:
-                        throw new FormatException("認識できないトークン'" + j.Name + "'" + j.otyParnum);
+                        throw new FormatException("認識できないトークン'" + j.Name + "'" + j.otyParnum + "これは演算子である必要があります。" + getSource(index));
                 }
             }
             return data;
+        }
+        string getSource(int index)
+        {
+            string ret = "";
+            int startindex = 0, endindex = 0;
+            for (int i = index; i >= 0; i--)
+            {
+                if (i < 0) break;
+                var j = this.result[i];
+                if (j.otyParnum == otyParnum.semicolon || j.otyParnum == otyParnum.blockstart || j.otyParnum == otyParnum.blockend)
+                {
+                    startindex = i + 1;
+                    break;
+                }
+            }
+            for (int i = index; i < result.Count; i++)
+            {
+                var j = this.result[i];
+                if (j.otyParnum == otyParnum.semicolon || j.otyParnum == otyParnum.blockstart || j.otyParnum == otyParnum.blockend)
+                {
+                    endindex = i;
+                    break;
+                }
+            }
+            for (int i = startindex; i <= endindex; i++)
+            {
+                var j = this.result[i];
+                ret += j.Name + " ";
+            }
+            return ret;
         }
     }
 }

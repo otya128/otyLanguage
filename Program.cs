@@ -294,7 +294,7 @@ for(int i=0;i<BF.Length;i++)
        // prg = @"var ptr=malloc(100);*ptr=""a"";print(print(1+1).GetType(),(string*)ptr);int i=0;i--;i++;i=i+1;i=i*2;";
        // prg = @"int i=0;i--;i++;i=i>>1;i=i*2;";
          var iii=Enumerable.Range(0, 10).ToArray();
-        prg = @"int[100] i;i=null;i=1;print(i);";
+        prg = @"int[100] i;i=null;i=1;print(i,true,false 1);";
             // Console.WriteLine(1 + j = 1);
             Console.WriteLine(prg);
             op.Parse(prg); foreach (var i in op.result)

@@ -39,10 +39,13 @@ namespace otypar
                 }
                 else
                 {
-                    switch (name)
+                    try
                     {
-                        case "null":
-                            return otyObj.NULL;
+                        return GetConstValue(name);
+                    }
+                    catch
+                    {
+                        throw new ArgumentException("変数" + name + "が存在しません。");
                     }
                 }
                 throw new ArgumentException("変数" + name + "が存在しません。");
@@ -112,10 +115,13 @@ namespace otypar
             }
             else
             {
-                switch (name)
+                try
                 {
-                    case "null":
-                        return otyObj.NULL;
+                    return GetConstValue(name);
+                }
+                catch
+                {
+                    throw new ArgumentException("変数" + name + "が存在しません。");
                 }
             }
             throw new ArgumentException("変数" + name + "が存在しません。");
@@ -155,6 +161,18 @@ namespace otypar
                 case "null":
                     throw new InvalidOperationException(name + "の値を変更できません。");
             }
+        }
+        public static otyObj GetConstValue(string name)
+        {
+            switch (name)
+            {
+                case "null":
+                    return otyObj.NULL;
+                case "true":
+                    return otyObj.True;
+                case "false":
+                    return otyObj.False;
+            } throw new ArgumentException("変数" + name + "が存在しません。");
         }
     }
     public partial class otyRun

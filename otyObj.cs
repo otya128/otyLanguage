@@ -52,8 +52,11 @@ namespace otypar
         {
             return this.Obj == null;
         }
-        public static otyObjNull NULL = new otyObjNull { IsConst = true };
-        public static otyObj Void = new otyObj { IsConst = true };//区別
+        public static readonly otyObjNull NULL = new otyObjNull { IsConst = true };
+        public static readonly otyObj Void = new otyObj { IsConst = true };//区別
+
+        public static readonly otyObj True = new otyObj { Obj = 1, IsConst = true };
+        public static readonly otyObj False = new otyObj { Obj = 0, IsConst = true };//区別
         public otyObj()
         {
         }
