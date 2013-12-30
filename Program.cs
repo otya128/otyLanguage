@@ -108,12 +108,12 @@ for( b = 0 ; b <= c ; b++ ) {
   for( c = 8400 ; c > 0 ; c -= 14 ) {
     d = 0;
     for( b = c - 1 ; b > 0 ; b-- ) {
-      g = 2 * b - 1;
-      d = d * b + (f[b]) * a;
+      g = (2 * b) - 1;
+      d = (d * b) +( f[b] * a);
       f[b] = d % g;
       d = d / g;
     }
-    printf(""{0:D4}"",e +d / a);
+    printf(""{0:D4}"",e +( d / a));
     e = d % a;
   }
 
@@ -138,24 +138,11 @@ int IsPrime(int n)
 ";
             prg =
 @"int main() {
-int hogee=0;
-object test;
-print(&hogee,&(1*20),&1);
-  int[10] ahoge;
-  ahoge[0]=1;
-  ahoge[0]++;
-  print(ahoge[0]);
-  print(ahoge[0]==0);
-  print(ahoge[0]);
-  ahoge[0]--;
-ahoge[0]+=100;
-  print(ahoge[0],""aaaaaaaaaaaa"",ahoge[0]);
-  print(""hogehoge""2*2+3);
-  print(256<<1);
-  int[10] aaa;
-aaa[0]=0;
-  print(aaa[0]+1);
-  print(""arere""aaa[0]);//int a = 10000;int c = 8400;int b;int d;int e;int g;int[8401] f;for( b = 0 ; b <= c ; b++ ){f[b] = a / 5;}e = 0;print(""PI="");for( c = 8400 ; c > 0 ; c -= 14 ) {g = 2 * b - 1;d = d * b + (f[b]) * a;f[b] = d % g;d = d / g;}print(e +d / a);e = d % a;}
+int i=2;
+int j=2;
+print(2*2+1,2*j+1,(1));//,i*i*i+(i));
+//return;
+//int a = 10000;int c = 8400;int b;int d;int e;int g;int[8401] f;for( b = 0 ; b <= c ; b++ ){f[b] = a / 5;}e = 0;print(""PI="");for( c = 8400 ; c > 0 ; c -= 14 ) {g = 2 * b - 1;d = d * b + (f[b]) * a;f[b] = d % g;d = d / g;}print(e +d / a);e = d % a;}
   int a = 10000;
   int c = 1000;
   int b;
@@ -172,14 +159,14 @@ aaa[0]=0;
     d = 0;
     for( b = c - 1 ; b > 0 ; b-- ) {
       g = 2 * b - 1;
-      d = d * b + f[b] * a;
+      d = d * b + (f[b]) * a;
       f[b] = d % g;
       d = d / g;
     }
     printf(""{0:D4}"",e +d / a);
     e = d % a;
     }
-}";
+}";/*
             prg = @"
 var Add(var arg,var value)
 {
@@ -233,11 +220,11 @@ print((string*)ptr,i);
 print('t');
 var str=""hoge"";var length=str.Length;print(&str+length*2-1);
 var str=""簡単に言うと数学で言う「!」のことか"";for(int ptr=&str+str.Length*2-1;ptr>=&str;ptr-=2){print((string*)ptr);}
-";
+";*/
             Console.Clear();
             Console.Title = "";
             Console.WriteLine("otyScript");
-        main:
+        main:/*
             prg = @"var BF=""
 >+++++++++[<++++++++>-]<.>+++++++[<++++>-]<+.+++++++..+++.[-]>++++++++[<++++>-]<.>+++++++++++[<+++++>-]<.>++++++++[<+++>-]<.+++.------.--------.[-]>++++++++[<++++>-]<+.[-]++++++++++.
 "";print(""hoge"");
@@ -294,8 +281,9 @@ for(int i=0;i<BF.Length;i++)
        // prg = @"var ptr=malloc(100);*ptr=""a"";print(print(1+1).GetType(),(string*)ptr);int i=0;i--;i++;i=i+1;i=i*2;";
        // prg = @"int i=0;i--;i++;i=i>>1;i=i*2;";
          var iii=Enumerable.Range(0, 10).ToArray();
-        prg = @"int[100] i;i=null;i=1;print(i,true,false 1);";
+        prg = @"int[100] i;i=null;i=1;print(i,true,false);";*/
             // Console.WriteLine(1 + j = 1);
+            //prg = "print(2*2+&1,2*2+";
             Console.WriteLine(prg);
             op.Parse(prg); foreach (var i in op.result)
             {

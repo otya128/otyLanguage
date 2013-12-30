@@ -560,7 +560,7 @@ namespace otypar
                                 i = obj.index;
                                 break;
                             default:
-                                throw new FormatException("認識できないトークン'" + j.Name + "'" + j.otyParnum);
+                                throw new FormatException("認識できないトークン'" + j.Name + "'" + j.otyParnum + getSource(i));
                                 //var obj = Eval(new otyObj(result[i].Obj, result, i));
                                 //i = obj.index;
                         }
@@ -628,7 +628,9 @@ namespace otypar
                         break;
                     case otyrunstate.Return:
                         this.FuncReturn = true;
-                            var ret = Eval(new otyObj(j.Obj, result, i));
+                        otyObj ret = otyObj.NULL;
+                        if(j.otyParnum!=otyParnum.semicolon)
+                            ret = Eval(new otyObj(j.Obj, result, i));
 
                             if (ret.isNull())
                             {
@@ -657,9 +659,11 @@ namespace otypar
                             case otyParnum.identifier:
                                 state = otyrunstate.IdenRun;
                                 break;
+                            case otyParnum.semicolon:
+                                break;
                             default:
                                 //error!!
-                               // throw new FormatException("認識できないトークン'" + j.Name + "'" + j.otyParnum);
+                                throw new FormatException("認識できないトークン'" + j.Name + "'" + j.otyParnum + getSource(index));
                                 break;
                         }
                         break;
