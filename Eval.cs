@@ -14,6 +14,9 @@ namespace otypar
         }
         public int Item;
     }
+    /// <summary>
+    /// HAPPY BUG YEAR!!!!!
+    /// </summary>
     public partial class otyRun
     {
         const int EqualPrece = 16;
